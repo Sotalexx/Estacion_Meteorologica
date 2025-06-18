@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "575565327672",
+    "project_id": "miprimeraapp-9799d",
+    "storage_bucket": "miprimeraapp-9799d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:575565327672:android:a0cdce87b386002b6ae5cd",
+        "android_client_info": {
+          "package_name": "com.example.autenticationapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2vB13IGf6HEzDwQ_Uzid5mBo8AWkEu-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
