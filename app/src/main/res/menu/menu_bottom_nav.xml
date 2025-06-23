@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/nav_home"
+        android:icon="@drawable/ic_home"
+        android:title="Clima" />
+    <item
+        android:id="@+id/nav_reports"
+        android:icon="@drawable/ic_report"
+        android:title="Informes" />
+    <item
+        android:id="@+id/nav_charts"
+        android:icon="@drawable/ic_graphics"
+        android:title="Gráficas" />
+    <item
+        android:id="@+id/nav_profile"
+        android:icon="@drawable/ic_perfil"
+        android:title="Perfil" />
+</menu>

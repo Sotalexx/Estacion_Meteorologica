@@ -12,11 +12,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.estacion_meteorologica.MainActivity;
 import com.example.estacion_meteorologica.R;
 
 public class Login extends AppCompatActivity {
 
-    Button btnBack;
+    Button btnBack, btnLogin;
     TextView btnIrLogin;
 
     @Override
@@ -25,6 +26,7 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         Button btnBack = findViewById(R.id.btnBack);
+        Button btnLogin = findViewById(R.id.btn_login);
         TextView btnIrLogin = findViewById(R.id.btnIrLogin);
 
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -42,6 +44,16 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         });
+
+        btnLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Login.this, MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
 
     }
 }
