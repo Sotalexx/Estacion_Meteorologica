@@ -50,7 +50,6 @@ public class Welcome extends AppCompatActivity {
                 viewPager.setCurrentItem(current + 1);
             } else {
                 startActivity(new Intent(this, SignUp.class));
-                finish();
             }
         });
 

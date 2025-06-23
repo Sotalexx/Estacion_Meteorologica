@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">WeatherNest</string>
+    <string name="Login">
+        <b>
+            <u>
+                Iniciar sesión
+            </u>
+        </b>
+    </string>
+    <string name="SignUp">
+        <b>
+            <u>
+                Registrarme
+            </u>
+        </b>
+    </string>
 </resources>
