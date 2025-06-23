@@ -3,25 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:backgroundTint="@color/fondo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
 <ScrollView
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="14dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--Header-->
         <LinearLayout
-            android:id="@+id/header"
-            android:layout_width="0dp"
+            android:id="@+id/LLheader"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="16dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
@@ -30,7 +30,8 @@
                 android:id="@+id/tvLocation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Monterey"
+                android:layout_weight="1"
+                android:text="San Miguel"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
@@ -42,71 +43,235 @@
                 android:src="@drawable/options"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="Options"/>
+
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tvDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="20 April, Thursday"
-            android:textSize="14sp"
-            android:textColor="@color/gris"
-            app:layout_constraintTop_toBottomOf="@+id/header"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="4dp"/>
-
-        <TextView
-            android:id="@+id/tvTime"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="02:42 PM"
-            android:textSize="14sp"
-            android:textColor="@color/gris"
-            app:layout_constraintTop_toBottomOf="@id/tvDate"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginTop="2dp"/>
-
-        <LinearLayout
-            android:id="@+id/tempSection"
+        <!--Card seccion principal-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardPrincipalSection"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:padding="16dp"
-            app:layout_constraintTop_toBottomOf="@id/tvTime"
+            android:layout_marginVertical="10dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="0dp"
+            app:layout_constraintTop_toBottomOf="@id/LLheader"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView
-                android:id="@+id/tvTemperature"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="24°C"
-                android:textSize="48sp"
-                android:textStyle="bold"
-                android:textColor="@color/black"/>
+                android:orientation="vertical"
+                android:padding="8dp"
+                android:gravity="center_horizontal">
 
-            <ImageView
-                android:id="@+id/imgWeatherIcon"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@drawable/sunny_cloud"
-                android:contentDescription="Weather Icon"
-                android:layout_marginStart="16dp"/>
-        </LinearLayout>
+                <!--Fecha y hora-->
+                <LinearLayout
+                    android:id="@+id/LLFechaHora"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="19dp"
+                    android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tvRealFeel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Real feel 16°C"
-            android:textSize="14sp"
-            android:textColor="@color/gris"
-            app:layout_constraintTop_toBottomOf="@id/tempSection"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
+                    <TextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="23 Junio, 2025"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/sofia_sans"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="02:42 PM"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/sofia_sans"
+                        android:textStyle="bold"/>
+
+                </LinearLayout>
+
+                <!-- Temperatura e icono -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="36dp"
+                    android:gravity="center_vertical">
+
+                    <TextView
+                        android:id="@+id/tvTemperature"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/sofia_sans_extra_condensed_medium"
+                        android:text="24° C"
+                        android:textColor="@color/black"
+                        android:textSize="100sp" />
+
+                    <ImageView
+                        android:id="@+id/imgWeatherIcon"
+                        android:layout_width="130dp"
+                        android:layout_height="120dp"
+                        android:src="@drawable/sunny_cloud"
+                        android:contentDescription="Weather Icon"
+                        android:layout_marginStart="12dp" />
+                </LinearLayout>
+
+                <!-- Real feel y lluvia -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="8dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Sensación real "
+                        android:textSize="14sp"
+                        android:textColor="@color/gris" />
+
+                    <TextView
+                        android:id="@+id/tvRealFeel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="23°C"
+                        android:textSize="14sp"
+                        android:textStyle="bold"/>
+
+                    <TextView
+                        android:id="@+id/tvRainProbability"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Lluvia: 5%"
+                        android:gravity="end"
+                        android:textSize="14sp"
+                        android:textColor="@color/gris" />
+                </LinearLayout>
+
+                <!-- Cards datos -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_marginTop="36dp">
+
+                    <!-- Cards 1 -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="110dp"
+                        android:layout_height="120dp"
+                        android:padding="10dp"
+                        android:layout_marginEnd="5dp"
+                        app:cardCornerRadius="16dp"
+                        android:backgroundTint="#509BF0"
+                        app:cardElevation="0dp"
+                        app:layout_constraintTop_toBottomOf="@id/infoBoxes"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:backgroundTint="@color/azul"
+                            android:padding="8dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_wind" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="6-8 km/h"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Cards 2 -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="110dp"
+                        android:layout_height="120dp"
+                        android:padding="10dp"
+                        android:layout_marginEnd="5dp"
+                        app:cardCornerRadius="16dp"
+                        android:backgroundTint="#65A2E6"
+                        app:cardElevation="0dp"
+                        app:layout_constraintTop_toBottomOf="@id/infoBoxes"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:backgroundTint="@color/azul"
+                            android:padding="8dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_wind" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="6-8 km/h"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                    <!-- Cards 3 -->
+                    <androidx.cardview.widget.CardView
+                        android:layout_width="110dp"
+                        android:layout_height="120dp"
+                        android:padding="10dp"
+                        app:cardCornerRadius="16dp"
+                        android:backgroundTint="#9AC5F4"
+                        app:cardElevation="0dp"
+                        app:layout_constraintTop_toBottomOf="@id/infoBoxes"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent">
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center"
+                            android:backgroundTint="@color/azul"
+                            android:padding="8dp">
+
+                            <ImageView
+                                android:layout_width="24dp"
+                                android:layout_height="24dp"
+                                android:src="@drawable/ic_wind" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="6-8 km/h"
+                                android:textSize="14sp"/>
+                        </LinearLayout>
+
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
         <LinearLayout
             android:id="@+id/infoBoxes"
@@ -115,7 +280,7 @@
             android:orientation="horizontal"
             android:gravity="center"
             android:layout_marginTop="12dp"
-            app:layout_constraintTop_toBottomOf="@id/tvRealFeel"
+            app:layout_constraintTop_toBottomOf="@id/cardPrincipalSection"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 

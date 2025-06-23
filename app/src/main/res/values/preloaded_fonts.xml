@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="preloaded_fonts" translatable="false">
+        <item>@font/inter_tight</item>
+        <item>@font/manrope</item>
+        <item>@font/sofia_sans</item>
+        <item>@font/sofia_sans_condensed</item>
+        <item>@font/sofia_sans_extra_condensed</item>
+        <item>@font/sofia_sans_extra_condensed_bold</item>
+        <item>@font/sofia_sans_extra_condensed_medium</item>
+        <item>@font/sofia_sans_semi_condensed</item>
+        <item>@font/urbanist_bold</item>
+        <item>@font/urbanist_medium</item>
+    </array>
+</resources>
