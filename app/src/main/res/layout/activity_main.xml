@@ -221,6 +221,7 @@
                                     android:textSize="14sp" />
 
                                 <TextView
+                                    android:id="@+id/tvWindCard1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/gris"
@@ -265,6 +266,7 @@
                                     android:textSize="14sp" />
 
                                 <TextView
+                                    android:id="@+id/tvTempCard1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/gris"
@@ -308,6 +310,7 @@
                                     android:textSize="14sp" />
 
                                 <TextView
+                                    android:id="@+id/tvHumedadCard1"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:textColor="@color/gris"
@@ -1168,13 +1171,14 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="85dp"
         android:layout_margin="8dp"
+        android:padding="0dp"
         android:background="@drawable/bottom_nav_background"
-        android:elevation="8dp"
+        app:itemPaddingTop="13dp"
+        app:itemActiveIndicatorStyle="@drawable/bottom_nav_background"
         app:itemIconTint="@color/bottom_nav_colors"
         app:itemTextColor="@color/bottom_nav_colors"
-        app:labelVisibilityMode="labeled"
         app:menu="@menu/menu_bottom_nav"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
