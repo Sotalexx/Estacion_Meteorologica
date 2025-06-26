@@ -6,4 +6,6 @@
     </style>
 
     <style name="Theme.Estacion_Meteorologica" parent="Base.Theme.Estacion_Meteorologica" />
+
+
 </resources>

@@ -6,14 +6,10 @@
         android:title="Clima" />
     <item
         android:id="@+id/nav_reports"
-        android:icon="@drawable/ic_report"
+        android:icon="@drawable/ic_reporte"
         android:title="Informes" />
     <item
         android:id="@+id/nav_charts"
         android:icon="@drawable/ic_graphics"
         android:title="Gráficas" />
-    <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_perfil"
-        android:title="Perfil" />
 </menu>
