@@ -8,5 +8,7 @@
     <color name="azul_negro">#06090C</color>
     <color name="gris">#6E7276</color>
     <color name="fondo">#F5F9FF</color>
+    <color name="morado">#673AB7</color>
+    <color name="aqua">#00BCD4</color>
     <color name="blanco_puro">#FFFFFF</color>
 </resources>

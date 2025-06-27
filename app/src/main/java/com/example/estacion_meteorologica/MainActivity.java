@@ -3,6 +3,7 @@ package com.example.estacion_meteorologica;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -11,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.ekn.gruzer.gaugelibrary.ArcGauge;
 import com.ekn.gruzer.gaugelibrary.HalfGauge;
@@ -39,10 +41,13 @@ import com.ekn.gruzer.gaugelibrary.Range;
 public class MainActivity extends AppCompatActivity {
 
     private DatabaseReference estacionRef;
+    private SwipeRefreshLayout swipeRefreshLayout;
     BarChart barChart;
     private CircularProgressIndicator gaugePresionL, gaugePresionMar, gaugeHumedad;
     private HalfGauge gaugeViento;
     private ArcGauge gaugeIndiceCalor;
+    private TextView textoEstadoComodidad, textoDetalleComodidad;
+    private ImageView iconoComodidad;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,20 +60,43 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
+        findViews();
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            leerUltimoRegistro();
+        });
+
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.azul, R.color.aqua, R.color.morado);
+
         estacionRef = FirebaseDatabase.getInstance()
                 .getReference("estacion")
                 .child("datos");
         leerUltimoRegistro();
 
+    }
 
-        gaugePresionMar = findViewById(R.id.gaugePresionMar);
-        gaugePresionL = findViewById(R.id.gaugePresionLocal);
-        gaugeHumedad = findViewById(R.id.gaugeHumedad);
-        gaugeViento = findViewById(R.id.gaugeVientos);
-        gaugeIndiceCalor = findViewById(R.id.gaugeIndiceCalor);
+    private void leerUltimoRegistro() {
+        estacionRef.limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot datoSnapshot : snapshot.getChildren()) {
+                    RegistroClima registro = obtenerDatosDeSnapshot(datoSnapshot);
+                    mostrarDatosEnTextViews(registro);
+                    mostrarGraficas(registro);
+                    configurarGaugeViento(registro.viento);
+                    configurarGaugeIndiceCalor(registro.indiceCalor);
+                    mostrarIndiceDeComodidad(registro);
+                }
+                swipeRefreshLayout.setRefreshing(false);
+            }
 
-        barChart = findViewById(R.id.barChart);
-
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.e("Firebase", "Error al leer", error.toException());
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
     }
 
     class RegistroClima {
@@ -91,24 +119,17 @@ public class MainActivity extends AppCompatActivity {
         Integer humedadSuelo;
     }
 
-    private void leerUltimoRegistro() {
-        estacionRef.limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot datoSnapshot : snapshot.getChildren()) {
-                    RegistroClima registro = obtenerDatosDeSnapshot(datoSnapshot);
-                    mostrarDatosEnTextViews(registro);
-                    mostrarGraficas(registro);
-                    configurarGaugeViento(registro.viento);
-                    configurarGaugeIndiceCalor(registro.indiceCalor);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.e("Firebase", "Error al leer", error.toException());
-            }
-        });
+    private void findViews(){
+        gaugePresionMar = findViewById(R.id.gaugePresionMar);
+        gaugePresionL = findViewById(R.id.gaugePresionLocal);
+        gaugeHumedad = findViewById(R.id.gaugeHumedad);
+        gaugeViento = findViewById(R.id.gaugeVientos);
+        gaugeIndiceCalor = findViewById(R.id.gaugeIndiceCalor);
+        barChart = findViewById(R.id.barChart);
+        textoEstadoComodidad = findViewById(R.id.textoEstadoComodidad);
+        textoDetalleComodidad = findViewById(R.id.textoDetalleComodidad);
+        iconoComodidad = findViewById(R.id.iconoComodidad);
+        swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout);
     }
 
     private RegistroClima obtenerDatosDeSnapshot(DataSnapshot snapshot) {
@@ -195,6 +216,98 @@ public class MainActivity extends AppCompatActivity {
         tvIndice.setText(String.valueOf(r.indiceCalor));
         tvAltitud.setText(r.altitud + " m");
     }
+
+    private void mostrarIndiceDeComodidad(RegistroClima r) {
+        String estado = "";
+        String detalle = "";
+        int iconoResId = R.drawable.sunny_cloud;
+
+        if (r.temperatura >= 20 && r.temperatura <= 26 && r.humedad >= 40 && r.humedad <= 65) {
+            estado = "Ambiente templado y húmedo";
+            detalle = "Condiciones agradables para actividades al aire libre.";
+
+            // Considera viento suave o fuerte
+            if (r.viento > 40) {
+                detalle += " Viento fuerte, toma precauciones si haces actividades al aire libre.";
+            } else if (r.viento > 20) {
+                detalle += "Brisa agradable que refresca el ambiente.";
+            }
+
+            // Considera humedad suelo
+            if (r.humedadSuelo < 10) {
+                detalle += " Suelo muy seco, riego recomendado para plantas.";
+            }
+
+            iconoResId = R.drawable.sunny_cloud;
+
+        } else if (r.temperatura > 26 && r.humedad > 65) {
+            estado = "Ambiente caluroso y húmedo";
+            detalle = "Puede sentirse sofocante y pegajoso, hidrátate bien.";
+
+            if (r.viento > 30) {
+                detalle += " Algo de viento ayuda a refrescar.";
+            }
+            if (r.humedadSuelo < 20) {
+                detalle += " Suelo seco, cuidado con la sequía en plantas y jardines.";
+            }
+
+            iconoResId = R.drawable.arrow;
+
+        } else if (r.temperatura < 20 && r.humedad > 65) {
+            estado = "Ambiente fresco y húmedo";
+            detalle = "El aire puede sentirse frío y húmedo, lleva ropa adecuada.";
+
+            if (r.viento > 25) {
+                detalle += " Viento frío podría aumentar la sensación de frío.";
+            }
+            if (r.humedadSuelo > 60) {
+                detalle += " Suelo húmedo, condiciones ideales para cultivo.";
+            }
+
+            iconoResId = R.drawable.google;
+
+        } else if (r.temperatura > 28 && r.humedad < 40) {
+            estado = "Ambiente seco y caluroso";
+            detalle = "Riesgo alto de deshidratación, evita esfuerzo físico y protege tu piel.";
+
+            if (r.viento > 30) {
+                detalle += " Viento seco y fuerte puede aumentar la sensación de calor.";
+            }
+            if (r.humedadSuelo < 15) {
+                detalle += " Suelo muy seco, riego urgente necesario.";
+            }
+
+            iconoResId = R.drawable.ic_humedad_suelo;
+
+        } else if (r.temperatura < 18 && r.humedad < 40) {
+            estado = "Ambiente seco y frío";
+            detalle = "El aire seco puede resecar la piel y vías respiratorias, usa hidratantes.";
+
+            if (r.viento > 20) {
+                detalle += " Viento frío puede incrementar la sensación de frío.";
+            }
+            if (r.humedadSuelo < 20) {
+                detalle += " Suelo seco, condiciones no ideales para cultivos.";
+            }
+
+            iconoResId = R.drawable.check;
+
+        } else {
+            estado = "Condiciones variables";
+            detalle = "No se detecta un patrón claro, mantente atento a los cambios del clima.";
+
+            if (r.viento > 30) {
+                detalle += " Viento fuerte puede afectar la sensación térmica.";
+            }
+            iconoResId = R.drawable.ic_home;
+        }
+
+        // Actualizar la UI
+        textoEstadoComodidad.setText(estado);
+        textoDetalleComodidad.setText(detalle);
+        iconoComodidad.setImageResource(iconoResId);
+    }
+
 
     private void mostrarGraficas(RegistroClima r) {
         float presionMax = 1084.8f;
