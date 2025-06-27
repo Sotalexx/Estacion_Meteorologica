@@ -14,6 +14,7 @@
         android:paddingHorizontal="14dp"
         android:paddingBottom="55dp"
         android:paddingTop="40dp"
+        android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -455,11 +456,19 @@
                             android:layout_height="70dp"
                             android:layout_gravity="end"
                             android:layout_marginEnd="16dp"
-                            app:startAngle="90"
-                            app:progressStrokeWidth="10dp"
+                            app:fillBackground="false"
+                            app:gradientType="linear"
+                            app:gradientEndColor="#3F51B5"
+                            app:progressBackgroundColor="@color/blanco_puro"
+                            app:direction="clockwise"
+                            app:dotColor="@color/blanco_puro"
+                            app:dotWidth="5dp"
+                            app:drawDot="true"
                             app:progressColor="@color/azul"
-                            app:backgroundColor="#202020" />
-
+                            app:progressStrokeWidth="10dp"
+                            app:startAngle="100"
+                            app:textColor="@color/azul"
+                            app:textSize="10dp"/>
 
 
                     </LinearLayout>
@@ -510,11 +519,19 @@
                             android:layout_height="70dp"
                             android:layout_gravity="end"
                             android:layout_marginEnd="16dp"
-                            app:startAngle="90"
-                            app:progressStrokeWidth="10dp"
+                            app:fillBackground="false"
+                            app:gradientType="linear"
+                            app:gradientEndColor="#673AB7"
+                            app:progressBackgroundColor="@color/blanco_puro"
+                            app:direction="clockwise"
+                            app:dotColor="@color/blanco_puro"
+                            app:dotWidth="5dp"
+                            app:drawDot="true"
                             app:progressColor="@color/azul"
-                            app:backgroundColor="#202020" />
-
+                            app:progressStrokeWidth="10dp"
+                            app:startAngle="100"
+                            app:textColor="@color/azul"
+                            app:textSize="10dp"/>
 
 
                     </LinearLayout>
@@ -888,7 +905,7 @@
 
             </LinearLayout>
 
-            <!-- SECCION CONDIONES AMBIENTALES -->
+             <!--SECCION CONDIONES AMBIENTALES-->
             <TextView
                 android:id="@+id/Titulo3"
                 android:layout_width="match_parent"
@@ -914,6 +931,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/Titulo3">
+
 
                 <!--HUMEDAD -->
                 <androidx.cardview.widget.CardView
@@ -954,16 +972,26 @@
                             android:textColor="@color/azul_negro"
                             android:textStyle="bold" />
 
+
                         <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
                             android:id="@+id/gaugeHumedad"
                             android:layout_width="match_parent"
                             android:layout_height="70dp"
                             android:layout_gravity="end"
                             android:layout_marginEnd="16dp"
-                            app:startAngle="90"
-                            app:progressStrokeWidth="10dp"
+                            app:progressBackgroundColor="#006E7276"
+                            app:fillBackground="false"
+                            app:gradientType="linear"
+                            app:gradientEndColor="#00BCD4"
+                            app:direction="clockwise"
+                            app:dotColor="@color/blanco_puro"
+                            app:dotWidth="5dp"
+                            app:drawDot="true"
                             app:progressColor="@color/azul"
-                            app:backgroundColor="#202020" />
+                            app:progressStrokeWidth="10dp"
+                            app:startAngle="100"
+                            app:textColor="@color/azul"
+                            app:textSize="10dp"/>
 
 
 
@@ -984,16 +1012,14 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:backgroundTint="@color/azul"
-                        android:gravity="center"
                         android:orientation="vertical"
-                        android:paddingVertical="5dp"
-                        android:paddingStart="12dp">
+                        android:padding="8dp"
+                        android:gravity="center_vertical">
 
                         <TextView
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Punto de rocio"
+                            android:text="Punto de rocío"
                             android:textSize="12sp"
                             android:fontFamily="@font/sofia_sans"
                             android:textColor="@color/gris"
@@ -1001,31 +1027,58 @@
 
                         <TextView
                             android:id="@+id/tvPuntoRocio"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="16°"
-                            android:layout_marginTop="5dp"
                             android:textSize="18sp"
+                            android:layout_marginBottom="4dp"
                             android:fontFamily="@font/sofia_sans"
-                            android:textColor="@color/azul_negro"
+                            android:textColor="@color/black"
                             android:textStyle="bold" />
 
-                        <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
-                            android:id="@+id/gaugePuntoRocio"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="70dp"
-                            android:layout_gravity="end"
-                            android:layout_marginEnd="16dp"
-                            app:startAngle="90"
-                            app:progressStrokeWidth="10dp"
-                            app:progressColor="@color/azul"
-                            app:backgroundColor="#202020" />
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical">
 
+                            <!-- Etiquetas -->
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:gravity="center_vertical">
 
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="● Rocío"
+                                    android:textColor="#00BCD4"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="@font/sofia_sans" />
 
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="● Temperatura"
+                                    android:textColor="@color/azul"
+                                    android:textSize="12sp"
+                                    android:textStyle="bold"
+                                    android:fontFamily="@font/sofia_sans" />
+                            </LinearLayout>
+
+                            <!-- Gráfico -->
+                            <com.github.mikephil.charting.charts.BarChart
+                                android:id="@+id/barChart"
+                                android:layout_width="100dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="8dp"
+                                android:padding="0dp" />
+                        </LinearLayout>
                     </LinearLayout>
-
                 </androidx.cardview.widget.CardView>
+
 
             </LinearLayout>
 
@@ -1079,17 +1132,13 @@
                             android:textColor="@color/azul_negro"
                             android:textStyle="bold" />
 
-                        <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
+                        <com.ekn.gruzer.gaugelibrary.ArcGauge
                             android:id="@+id/gaugeIndiceCalor"
-                            android:layout_width="match_parent"
-                            android:layout_height="70dp"
+                            android:layout_width="100dp"
+                            android:layout_height="75dp"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="16dp"
-                            app:startAngle="90"
-                            app:progressStrokeWidth="10dp"
-                            app:progressColor="@color/azul"
-                            app:backgroundColor="#202020" />
-
+                            android:layout_margin="0dp"
+                            android:padding="0dp" />
 
 
                     </LinearLayout>
@@ -1135,16 +1184,13 @@
                             android:textColor="@color/azul_negro"
                             android:textStyle="bold" />
 
-                        <antonkozyriatskyi.circularprogressindicator.CircularProgressIndicator
-                            android:id="@+id/gaugeViento"
-                            android:layout_width="match_parent"
-                            android:layout_height="70dp"
+                        <com.ekn.gruzer.gaugelibrary.HalfGauge
+                            android:id="@+id/gaugeVientos"
+                            android:layout_width="100dp"
+                            android:layout_height="75dp"
                             android:layout_gravity="end"
-                            android:layout_marginEnd="16dp"
-                            app:startAngle="90"
-                            app:progressStrokeWidth="10dp"
-                            app:progressColor="@color/azul"
-                            app:backgroundColor="#202020" />
+                            android:layout_margin="0dp"
+                            android:padding="0dp" />
 
                     </LinearLayout>
 
@@ -1157,16 +1203,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-<!--    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottomNavigationView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:menu="@menu/menu_bottom_nav" />-->
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
@@ -1196,48 +1232,3 @@
                             android:background="@drawable/rounded_background"
                             android:elevation="4dp" />-->
 
-    <!-- Puede ser util -->
-    <!--        <LinearLayout
-                android:id="@+id/infoBoxes"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center"
-                android:layout_marginTop="12dp"
-                app:layout_constraintTop_toBottomOf="@id/cardIndiceComodidad"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <include layout="@layout/widget_info_box" android:id="@+id/windBox"/>
-                <include layout="@layout/widget_info_box" android:id="@+id/tempBox"/>
-                <include layout="@layout/widget_info_box" android:id="@+id/humidityBox"/>
-            </LinearLayout>-->
-
-    <!--        <androidx.cardview.widget.CardView
-                android:id="@+id/cardHourly"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="10dp"
-                app:cardCornerRadius="16dp"
-                app:layout_constraintTop_toBottomOf="@id/prueba"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:padding="12dp">
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="05:00 AM\n22°" />
-
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="06:00 AM\n18°" />
-
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>-->
