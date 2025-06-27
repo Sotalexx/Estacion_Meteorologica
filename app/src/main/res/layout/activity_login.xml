@@ -29,6 +29,7 @@
             android:orientation="vertical">
 
             <!--Boton de regresar-->
+
             <Button
                 android:id="@+id/btnBack"
                 android:layout_width="40dp"
@@ -71,7 +72,7 @@
                     android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:hint="   Correo electronico"
+                    android:hint="      Correo electronico"
                     android:textColor="#737070"
                     android:textColorHint="#737070" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -99,7 +100,7 @@
                     android:id="@+id/password"
                     android:layout_width="match_parent"
                     android:layout_height="55dp"
-                    android:hint="   Contraseña"
+                    android:hint="      Contraseña"
                     android:inputType="textPassword"
                     android:textColor="#737070"
                     android:textColorHint="#737070" />
@@ -158,67 +159,35 @@
 
             </LinearLayout>
 
-            <LinearLayout
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnGoogle"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/bg_btn"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp">
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Google"
+                app:cornerRadius="14dp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                app:icon="@drawable/google"
+                app:iconTint="@null"
+                app:iconPadding="12dp"
+                app:iconGravity="textStart"
+                app:iconSize="24dp" />
 
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="10dp"
-                    android:contentDescription="Google Icon"
-                    android:src="@drawable/google" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:text="Google"
-                    android:textColor="@color/azul_negro"
-                    android:textSize="16sp" />
-            </LinearLayout>
-
-            <LinearLayout
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnFacebook"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/bg_btn"
-                android:clickable="true"
-                android:focusable="true"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:paddingStart="24dp"
-                android:paddingEnd="24dp">
-
-                <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
-                    android:layout_marginEnd="10dp"
-                    android:contentDescription="Facebook Icon"
-                    android:src="@drawable/facebook" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-medium"
-                    android:gravity="center"
-                    android:text="Facebook"
-                    android:textColor="@color/azul_negro"
-                    android:textSize="16sp" />
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="Facebook"
+                app:cornerRadius="14dp"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/black"
+                app:icon="@drawable/facebook"
+                app:iconTint="@null"
+                app:iconPadding="12dp"
+                app:iconGravity="textStart"
+                app:iconSize="24dp" />
 
             <!--Ya tienes cuenta?-->
             <LinearLayout
@@ -243,8 +212,6 @@
                     android:gravity="center"
                     android:text="@string/SignUp"
                     android:textColor="@color/azul" />
-
-
             </LinearLayout>
 
         </LinearLayout>

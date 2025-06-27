@@ -7,26 +7,30 @@
     android:layout_height="match_parent"
     android:background="@drawable/background_gradient"
     android:padding="10dp"
+    android:fitsSystemWindows="true"
     tools:context=".start.SignUp">
-
 
     <LinearLayout
         android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginHorizontal="18dp"
         android:layout_marginTop="35dp"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:paddingBottom="24dp">
 
-        <!--Boton de regresar-->
-        <Button
+        <!-- Botón de regresar -->
+        <ImageButton
             android:id="@+id/btnBack"
-            android:layout_width="40dp"
+            android:layout_width="45dp"
             android:layout_height="45dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:backgroundTint="#1AFFFFFF"
-            android:paddingStart="15dp"
-            app:tint="@color/blanco"
-            app:icon="@drawable/arrow_back"/>
+            android:padding="10dp"
+            android:src="@drawable/arrow_back"
+            android:tint="@color/blanco"
+            android:layout_gravity="start" />
 
+        <!-- Título -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -38,17 +42,18 @@
             android:textColor="@color/white"
             android:layout_marginTop="60dp" />
 
-        <!--Ingresar información y checkbox-->
+        <!-- Campo Nombre -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/name"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="55dp"
             app:boxBackgroundColor="#E9FFFFFF"
-            app:boxCornerRadiusBottomEnd="32dp"
-            app:boxCornerRadiusBottomStart="32dp"
-            app:boxCornerRadiusTopEnd="32dp"
             app:boxCornerRadiusTopStart="32dp"
+            app:boxCornerRadiusTopEnd="32dp"
+            app:boxCornerRadiusBottomStart="32dp"
+            app:boxCornerRadiusBottomEnd="32dp"
             app:boxStrokeColor="#737070"
             app:boxStrokeWidth="0.5dp"
             app:boxStrokeWidthFocused="1dp"
@@ -57,24 +62,25 @@
             app:startIconTint="#737070">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:hint="   Nombre"
+                android:hint="     Nombre"
                 android:textColor="#737070"
                 android:textColorHint="#737070" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Campo Email -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/email"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:boxBackgroundColor="#E9FFFFFF"
-            app:boxCornerRadiusBottomEnd="32dp"
-            app:boxCornerRadiusBottomStart="32dp"
-            app:boxCornerRadiusTopEnd="32dp"
             app:boxCornerRadiusTopStart="32dp"
+            app:boxCornerRadiusTopEnd="32dp"
+            app:boxCornerRadiusBottomStart="32dp"
+            app:boxCornerRadiusBottomEnd="32dp"
             app:boxStrokeColor="#737070"
             app:boxStrokeWidth="0.5dp"
             app:boxStrokeWidthFocused="1dp"
@@ -83,24 +89,25 @@
             app:startIconTint="#737070">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:hint="   Correo electronico"
+                android:hint="       Correo electrónico"
                 android:textColor="#737070"
                 android:textColorHint="#737070" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Campo Contraseña -->
         <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/password"
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
-            android:layout_height="60dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             app:boxBackgroundColor="#E9FFFFFF"
-            app:boxCornerRadiusBottomEnd="32dp"
-            app:boxCornerRadiusBottomStart="32dp"
-            app:boxCornerRadiusTopEnd="32dp"
             app:boxCornerRadiusTopStart="32dp"
+            app:boxCornerRadiusTopEnd="32dp"
+            app:boxCornerRadiusBottomStart="32dp"
+            app:boxCornerRadiusBottomEnd="32dp"
             app:boxStrokeColor="#737070"
             app:boxStrokeWidth="0.5dp"
             app:boxStrokeWidthFocused="1dp"
@@ -111,26 +118,27 @@
             app:startIconTint="#737070">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
-                android:hint="   Contraseña"
+                android:hint="     Contraseña"
                 android:inputType="textPassword"
                 android:textColor="#737070"
                 android:textColorHint="#737070" />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <!-- Checkbox Recuérdame -->
         <com.google.android.material.checkbox.MaterialCheckBox
             android:id="@+id/checkBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:fontFamily="sans-serif-medium"
             android:text="Recuérdame"
             android:textColor="#737070"
             android:textSize="14sp"
             app:buttonTint="@color/gris" />
 
-        <!--Boton de registro solo, con google y con facebook -->
+        <!-- Botón Registrarme -->
         <Button
             android:id="@+id/btn_signup"
             android:text="Registrarme"
@@ -141,8 +149,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
+        <!-- Separador con "O" -->
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_gravity="center"
@@ -150,14 +159,13 @@
             android:gravity="center">
 
             <View
-                android:id="@+id/view"
-                android:layout_width="wrap_content"
-                android:layout_height="0.5dp"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
                 android:layout_weight="1"
                 android:background="#737070" />
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="O"
                 android:paddingHorizontal="15dp"
@@ -165,104 +173,73 @@
                 android:gravity="center" />
 
             <View
-                android:id="@+id/view2"
-                android:layout_width="wrap_content"
-                android:layout_height="0.5dp"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
                 android:layout_weight="1"
                 android:background="#737070" />
-
         </LinearLayout>
 
-        <LinearLayout
+        <!-- Botón Google -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnGoogle"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:background="@drawable/bg_btn"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:clickable="true"
-            android:focusable="true">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:text="Google"
+            app:cornerRadius="14dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            app:icon="@drawable/google"
+            app:iconTint="@null"
+            app:iconPadding="12dp"
+            app:iconGravity="textStart"
+            app:iconSize="24dp" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/google"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="Google Icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Google"
-                android:textColor="@color/azul_negro"
-                android:textSize="16sp"
-                android:fontFamily="sans-serif-medium" />
-        </LinearLayout>
-
-        <LinearLayout
+        <!-- Botón Facebook -->
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/btnFacebook"
             android:layout_width="match_parent"
-            android:layout_height="45dp"
-            android:layout_marginTop="16dp"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_gravity="center"
-            android:background="@drawable/bg_btn"
-            android:paddingStart="24dp"
-            android:paddingEnd="24dp"
-            android:clickable="true"
-            android:focusable="true">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:text="Facebook"
+            app:cornerRadius="14dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            app:icon="@drawable/facebook"
+            app:iconTint="@null"
+            app:iconPadding="12dp"
+            app:iconGravity="textStart"
+            app:iconSize="24dp" />
 
-            <ImageView
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:src="@drawable/facebook"
-                android:layout_marginEnd="10dp"
-                android:contentDescription="Facebook Icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="Facebook"
-                android:textColor="@color/azul_negro"
-                android:textSize="16sp"
-                android:fontFamily="sans-serif-medium" />
-        </LinearLayout>
-
-        <!--Ya tienes cuenta?-->
+        <!-- Ya tienes cuenta -->
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:layout_marginTop="10dp"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:gravity="center_vertical">
 
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Ya tienes una cuenta?"
+                android:text="¿Ya tienes una cuenta?"
                 android:textColor="@color/gris"
-                android:layout_marginTop="24dp"
-                android:gravity="center" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/btnIrLogin"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/Login"
+                android:text="Inicia sesión"
                 android:textColor="@color/azul"
-                android:layout_marginTop="24dp"
-                android:gravity="center" />
-
+                android:textStyle="bold"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingStart="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:textSize="14sp" />
         </LinearLayout>
 
-
     </LinearLayout>
-
 </ScrollView>
