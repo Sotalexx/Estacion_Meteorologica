@@ -13,7 +13,28 @@
           "package_name": "com.example.estacion_meteorologica"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "384339025610-075d5ghbir4btvtvhdbjdsni64661htn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.estacion_meteorologica",
+            "certificate_hash": "38d8369767941c5b4bfdf19ad820e1b802b8cd87"
+          }
+        },
+        {
+          "client_id": "384339025610-e8495foljpvos6kdopictlpspeu2qgpc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.estacion_meteorologica",
+            "certificate_hash": "edb007861b5f1a3bb45b23c2ec1a182f5fc77a33"
+          }
+        },
+        {
+          "client_id": "384339025610-29es4iiro93rgmu7gd2c9hg00jq36nv9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCsR-NSxYHUbZN-UchWYWDP0XG_PlOv0Ok"
@@ -21,7 +42,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "384339025610-29es4iiro93rgmu7gd2c9hg00jq36nv9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

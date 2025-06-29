@@ -1,14 +1,18 @@
 package com.example.estacion_meteorologica.start;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager2.widget.ViewPager2;
 
+import com.example.estacion_meteorologica.MainActivity;
 import com.example.estacion_meteorologica.R;
 import com.example.estacion_meteorologica.models.ItemSlide;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,19 +31,27 @@ public class Welcome extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_welcome);
 
-        ViewPager2 viewPager = findViewById(R.id.viewPager);
-        ExtendedFloatingActionButton btnNext = findViewById(R.id.btn_next);
-        CircleIndicator3 indicator = findViewById(R.id.indicator);
+        viewPager = findViewById(R.id.viewPager);
+        btnNext = findViewById(R.id.btn_next);
+        indicator = findViewById(R.id.indicator);
 
-
-        List<ItemSlide> slideItems = new ArrayList<>();
+        slideItems = new ArrayList<>();
         slideItems.add(new ItemSlide("Weather Nest", "Está es tu estación meteorológica personal impulsada por Arduino."));
         slideItems.add(new ItemSlide("Seguimiento de datos", "Monitorea la temperatura, la humedad de casa y más, desde cualquier lugar."));
         slideItems.add(new ItemSlide("Mantente informado", "Obten la ultima información y reportes del clima incluso sin conexión."));
 
-        WelcomePagerAdapter adapter = new WelcomePagerAdapter(slideItems);
+        adapter = new WelcomePagerAdapter(slideItems);
         viewPager.setAdapter(adapter);
 
         indicator.setViewPager(viewPager);
@@ -50,6 +62,7 @@ public class Welcome extends AppCompatActivity {
                 viewPager.setCurrentItem(current + 1);
             } else {
                 startActivity(new Intent(this, SignUp.class));
+                finish(); // Opcional, para que no regrese a bienvenida si presiona atrás
             }
         });
 
@@ -67,5 +80,4 @@ public class Welcome extends AppCompatActivity {
             }
         });
     }
-
 }

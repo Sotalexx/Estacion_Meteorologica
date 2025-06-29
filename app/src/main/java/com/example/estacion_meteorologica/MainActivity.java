@@ -1,27 +1,41 @@
 package com.example.estacion_meteorologica;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.ekn.gruzer.gaugelibrary.ArcGauge;
 import com.ekn.gruzer.gaugelibrary.HalfGauge;
+import com.example.estacion_meteorologica.start.Welcome;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,6 +45,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -53,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -61,6 +77,8 @@ public class MainActivity extends AppCompatActivity {
         });
 
         findViews();
+        Button btnCerrarSesion = findViewById(R.id.btnCerrarSesion);
+        Button btnPerfil = findViewById(R.id.btnPerfil);
 
         swipeRefreshLayout.setOnRefreshListener(() -> {
             leerUltimoRegistro();
@@ -73,6 +91,77 @@ public class MainActivity extends AppCompatActivity {
                 .getReference("estacion")
                 .child("datos");
         leerUltimoRegistro();
+
+        //Boton de cerrar sesion
+        btnCerrarSesion.setOnClickListener(v -> {
+            new AlertDialog.Builder(MainActivity.this)
+                    .setTitle("Cerrar sesión")
+                    .setMessage("¿Estás seguro que deseas cerrar sesión?")
+                    .setPositiveButton("Sí", (dialog, which) -> {
+                        // ✅ Cerrar sesión de Firebase
+                        FirebaseAuth.getInstance().signOut();
+
+                        // ✅ Eliminar preferencia "recuerdame"
+                        SharedPreferences prefs = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.remove("recuerdame");
+                        editor.apply();
+
+                        // ✅ Cerrar sesión de Google también (por si aplicó)
+                        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this,
+                                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                        .requestIdToken(getString(R.string.client_id))
+                                        .requestEmail()
+                                        .build());
+                        googleSignInClient.signOut();
+
+                        // ✅ Ir a la pantalla de bienvenida o login
+                        Intent intent = new Intent(MainActivity.this, Welcome.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Cancelar", (dialog, which) -> {
+                        dialog.dismiss(); // Solo cierra el diálogo
+                    })
+                    .show();
+        });
+
+        //Boton de Perfil
+        btnPerfil.setOnClickListener(v -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user != null) {
+                View dialogView = getLayoutInflater().inflate(R.layout.dialog_perfil, null);
+
+                ImageView imgPerfil = dialogView.findViewById(R.id.imgPerfil);
+                TextView tvNombre = dialogView.findViewById(R.id.tvNombrePerfil);
+                TextView tvCorreo = dialogView.findViewById(R.id.tvCorreoPerfil);
+
+                // Setear nombre y correo
+                tvNombre.setText(user.getDisplayName() != null ? user.getDisplayName() : "Nombre no disponible");
+                tvCorreo.setText(user.getEmail());
+
+                // Cargar imagen (si hay)
+                Uri photoUri = user.getPhotoUrl();
+                if (photoUri != null) {
+                    Glide.with(this)
+                            .load(photoUri)
+                            .circleCrop()
+                            .placeholder(R.drawable.ic_user_placeholder)
+                            .into(imgPerfil);
+                } else {
+                    imgPerfil.setImageResource(R.drawable.ic_user_placeholder);
+                }
+
+                // Mostrar el diálogo
+                new AlertDialog.Builder(MainActivity.this)
+                        .setView(dialogView)
+                        .setPositiveButton("Cerrar", null)
+                        .show();
+            } else {
+                Toast.makeText(MainActivity.this, "No hay usuario en sesión", Toast.LENGTH_SHORT).show();
+            }
+        });
 
     }
 
@@ -87,6 +176,7 @@ public class MainActivity extends AppCompatActivity {
                     configurarGaugeViento(registro.viento);
                     configurarGaugeIndiceCalor(registro.indiceCalor);
                     mostrarIndiceDeComodidad(registro);
+                    actualizarIconoClima(registro);
                 }
                 swipeRefreshLayout.setRefreshing(false);
             }
@@ -102,6 +192,8 @@ public class MainActivity extends AppCompatActivity {
     class RegistroClima {
         String fecha;
         String hora;
+        String ciudad;
+        String pais;
         Double temperatura;
         Double humedad;
         Double sensacionTermica;
@@ -151,7 +243,46 @@ public class MainActivity extends AppCompatActivity {
         r.rocio = snapshot.child("punto_rocio").getValue(Integer.class);
         r.indiceCalor = snapshot.child("indice_calor").getValue(Integer.class);
         r.humedadSuelo = snapshot.child("suelo_humedad").getValue(Integer.class);
+        r.pais = snapshot.child("ciudad").getValue(String.class);
+        r.ciudad = snapshot.child("pais").getValue(String.class);
         return r;
+    }
+
+    private void actualizarIconoClima(RegistroClima r) {
+        ImageView imgWeatherIcon = findViewById(R.id.imgWeatherIcon);
+
+        boolean esNoche = false;
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+            Date horaDate = sdf.parse(r.hora);
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(horaDate);
+            int hora = calendar.get(Calendar.HOUR_OF_DAY);
+            esNoche = (hora >= 19 || hora < 6);
+        } catch (ParseException e) {
+            e.printStackTrace();
+            Log.e("Clima", "Error al parsear la hora: " + r.hora);
+        }
+
+        int icono = R.drawable.sunny;
+
+        if (r.lluvia >= 50) {
+            icono = R.drawable.storm;
+        } else if (r.lluvia >= 20) {
+            icono = R.drawable.rainy;
+        } else if (r.viento >= 40) {
+            icono = R.drawable.windy;
+        } else if (r.humedad >= 60) {
+            icono = esNoche ? R.drawable.night_pardly_cloudy : R.drawable.cloudy;
+        } else if (r.temperatura >= 30) {
+            icono = esNoche ? R.drawable.night_clear : R.drawable.sunny;
+        } else if (r.temperatura >= 20) {
+            icono = esNoche ? R.drawable.night_clear : R.drawable.partly_cloudy;
+        } else {
+            icono = esNoche ? R.drawable.night_pardly_cloudy : R.drawable.cloudy;
+        }
+
+        imgWeatherIcon.setImageResource(icono);
     }
 
     private void mostrarDatosEnTextViews(RegistroClima r) {
@@ -175,6 +306,7 @@ public class MainActivity extends AppCompatActivity {
         TextView tvRocio = findViewById(R.id.tvPuntoRocio);
         TextView tvIndice = findViewById(R.id.tvIndiceCalor);
         TextView tvVient = findViewById(R.id.tvViento);
+        TextView tvLocation = findViewById(R.id.tvLocation);
 
         SimpleDateFormat entradaFecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         SimpleDateFormat salidaFecha = new SimpleDateFormat("dd MMMM, yyyy", new Locale("es", "ES"));
@@ -215,30 +347,29 @@ public class MainActivity extends AppCompatActivity {
         tvRocio.setText(r.rocio + "°");
         tvIndice.setText(String.valueOf(r.indiceCalor));
         tvAltitud.setText(r.altitud + " m");
+        tvLocation.setText(r.pais + "\n" + r.ciudad);
     }
 
     private void mostrarIndiceDeComodidad(RegistroClima r) {
         String estado = "";
         String detalle = "";
-        int iconoResId = R.drawable.sunny_cloud;
+        int iconoResId = R.drawable.cloudy;
 
         if (r.temperatura >= 20 && r.temperatura <= 26 && r.humedad >= 40 && r.humedad <= 65) {
             estado = "Ambiente templado y húmedo";
             detalle = "Condiciones agradables para actividades al aire libre.";
 
-            // Considera viento suave o fuerte
             if (r.viento > 40) {
                 detalle += " Viento fuerte, toma precauciones si haces actividades al aire libre.";
             } else if (r.viento > 20) {
                 detalle += "Brisa agradable que refresca el ambiente.";
             }
 
-            // Considera humedad suelo
             if (r.humedadSuelo < 10) {
                 detalle += " Suelo muy seco, riego recomendado para plantas.";
             }
 
-            iconoResId = R.drawable.sunny_cloud;
+            iconoResId = R.drawable.ic_condiciones_agradables;
 
         } else if (r.temperatura > 26 && r.humedad > 65) {
             estado = "Ambiente caluroso y húmedo";
@@ -251,7 +382,7 @@ public class MainActivity extends AppCompatActivity {
                 detalle += " Suelo seco, cuidado con la sequía en plantas y jardines.";
             }
 
-            iconoResId = R.drawable.arrow;
+            iconoResId = R.drawable.ic_caluroso_humedo;
 
         } else if (r.temperatura < 20 && r.humedad > 65) {
             estado = "Ambiente fresco y húmedo";
@@ -264,7 +395,7 @@ public class MainActivity extends AppCompatActivity {
                 detalle += " Suelo húmedo, condiciones ideales para cultivo.";
             }
 
-            iconoResId = R.drawable.google;
+            iconoResId = R.drawable.ic_fresco_humedo;
 
         } else if (r.temperatura > 28 && r.humedad < 40) {
             estado = "Ambiente seco y caluroso";
@@ -277,7 +408,7 @@ public class MainActivity extends AppCompatActivity {
                 detalle += " Suelo muy seco, riego urgente necesario.";
             }
 
-            iconoResId = R.drawable.ic_humedad_suelo;
+            iconoResId = R.drawable.ic_seco_caluroso;
 
         } else if (r.temperatura < 18 && r.humedad < 40) {
             estado = "Ambiente seco y frío";
@@ -290,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                 detalle += " Suelo seco, condiciones no ideales para cultivos.";
             }
 
-            iconoResId = R.drawable.check;
+            iconoResId = R.drawable.ic_seco_frio;
 
         } else {
             estado = "Condiciones variables";
@@ -299,7 +430,7 @@ public class MainActivity extends AppCompatActivity {
             if (r.viento > 30) {
                 detalle += " Viento fuerte puede afectar la sensación térmica.";
             }
-            iconoResId = R.drawable.ic_home;
+            iconoResId = R.drawable.ic_variable;
         }
 
         // Actualizar la UI
@@ -307,7 +438,6 @@ public class MainActivity extends AppCompatActivity {
         textoDetalleComodidad.setText(detalle);
         iconoComodidad.setImageResource(iconoResId);
     }
-
 
     private void mostrarGraficas(RegistroClima r) {
         float presionMax = 1084.8f;

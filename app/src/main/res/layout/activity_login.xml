@@ -8,50 +8,41 @@
     android:background="@drawable/background_gradient"
     tools:context=".start.Login">
 
-    <!-- Scroll principal -->
+    <ImageView
+        android:id="@+id/background_nubes"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:layout_gravity="top"
+        android:scaleType="centerCrop"
+        android:src="@drawable/nubes" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:paddingHorizontal="15dp"
-        android:paddingBottom="20dp">
+        android:layout_marginHorizontal="18dp"
+        android:layout_marginTop="35dp"
+        android:padding="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- Imagen decorativa superior -->
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="250dp">
-
-                <ImageView
-                    android:id="@+id/background_nubes"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/nubes" />
-
-                <!-- Botón de regresar sobre la imagen -->
-                <ImageButton
-                    android:id="@+id/btnBack"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_margin="16dp"
-                    android:layout_gravity="top|start"
-                    android:backgroundTint="#1AFFFFFF"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:src="@drawable/arrow_back"
-                    android:contentDescription="Volver"
-                    app:tint="@color/blanco" />
-            </FrameLayout>
+            <!--Boton de regresar-->
+            <Button
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="45dp"
+                android:backgroundTint="#1AFFFFFF"
+                android:paddingStart="15dp"
+                app:icon="@drawable/arrow_back"
+                app:tint="@color/blanco" />
 
             <!-- Texto de bienvenida -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="100dp"
                 android:fontFamily="sans-serif-black"
                 android:gravity="center"
                 android:paddingHorizontal="30dp"
@@ -59,19 +50,19 @@
                 android:textColor="@color/white"
                 android:textSize="24sp" />
 
-            <!-- Campo Email -->
-            <!-- (sin cambios importantes, solo identado) -->
+
+            <!--Ingresar información y checkbox-->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/email"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
                 app:boxBackgroundColor="#E9FFFFFF"
-                app:boxCornerRadiusTopStart="32dp"
-                app:boxCornerRadiusTopEnd="32dp"
-                app:boxCornerRadiusBottomStart="32dp"
                 app:boxCornerRadiusBottomEnd="32dp"
+                app:boxCornerRadiusBottomStart="32dp"
+                app:boxCornerRadiusTopEnd="32dp"
+                app:boxCornerRadiusTopStart="32dp"
                 app:boxStrokeColor="#737070"
                 app:boxStrokeWidth="0.5dp"
                 app:boxStrokeWidthFocused="1dp"
@@ -81,24 +72,23 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:hint="      Correo electrónico"
+                    android:layout_height="55dp"
+                    android:hint="   Correo electronico"
                     android:textColor="#737070"
                     android:textColorHint="#737070" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Campo Contraseña -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/password"
                 style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="60dp"
                 android:layout_marginTop="16dp"
                 app:boxBackgroundColor="#E9FFFFFF"
-                app:boxCornerRadiusTopStart="32dp"
-                app:boxCornerRadiusTopEnd="32dp"
-                app:boxCornerRadiusBottomStart="32dp"
                 app:boxCornerRadiusBottomEnd="32dp"
+                app:boxCornerRadiusBottomStart="32dp"
+                app:boxCornerRadiusTopEnd="32dp"
+                app:boxCornerRadiusTopStart="32dp"
                 app:boxStrokeColor="#737070"
                 app:boxStrokeWidth="0.5dp"
                 app:boxStrokeWidthFocused="1dp"
@@ -110,24 +100,39 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="     Contraseña"
+                    android:layout_height="55dp"
+                    android:hint="   Contraseña"
                     android:inputType="textPassword"
                     android:textColor="#737070"
                     android:textColorHint="#737070" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Checkbox -->
-            <com.google.android.material.checkbox.MaterialCheckBox
-                android:id="@+id/checkBox"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:fontFamily="sans-serif-medium"
-                android:text="Recuérdame"
-                android:textColor="#737070"
-                android:textSize="14sp"
-                app:buttonTint="@color/gris" />
+
+                android:orientation="horizontal">
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/checkBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="Recuérdame"
+                    android:textColor="#737070"
+                    android:textSize="14sp"
+                    app:buttonTint="@color/gris" />
+
+                <TextView
+                    android:id="@+id/tvOlvidasteContrasena"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/contraseña"
+                    android:textColor="#737070"
+                    android:textSize="14sp" />
+            </LinearLayout>
 
             <!-- Botón Login -->
             <Button
@@ -142,96 +147,129 @@
 
             <!-- Separador -->
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_marginVertical="15dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:id="@+id/view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.5dp"
                     android:layout_weight="1"
                     android:background="#737070" />
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="center"
                     android:paddingHorizontal="15dp"
                     android:text="O"
                     android:textColor="#737070" />
 
                 <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
+                    android:id="@+id/view2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0.5dp"
                     android:layout_weight="1"
                     android:background="#737070" />
+
             </LinearLayout>
 
             <!-- Botones sociales -->
-            <com.google.android.material.button.MaterialButton
+            <LinearLayout
                 android:id="@+id/btnGoogle"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/blanco_puro"
-                android:text="Iniciar sesión con Google"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:cornerRadius="16dp"
-                app:icon="@drawable/google"
-                app:iconGravity="textStart"
-                app:iconPadding="12dp"
-                app:iconTint="@null"
-                android:elevation="4dp" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnFacebook"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="@color/blanco_puro"
-                android:text="Iniciar sesión con Facebook"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                app:cornerRadius="16dp"
-                app:icon="@drawable/facebook"
-                app:iconGravity="textStart"
-                app:iconPadding="12dp"
-                app:iconTint="@null"
-                android:elevation="4dp" />
-
-            <!-- Ir a registro -->
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="45dp"
                 android:layout_gravity="center"
-                android:layout_marginTop="24dp"
-                android:orientation="horizontal">
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_btn"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="Google Icon"
+                    android:src="@drawable/google" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="4dp"
-                    android:text="¿No tienes una cuenta?"
-                    android:textColor="@color/gris"
-                    android:textSize="14sp" />
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="Google"
+                    android:textColor="@color/azul_negro"
+                    android:textSize="16sp" />
+            </LinearLayout>
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btnIrLogin"
+            <LinearLayout
+                android:id="@+id/btnFacebook"
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/bg_btn"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp">
+
+                <ImageView
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_marginEnd="10dp"
+                    android:contentDescription="Facebook Icon"
+                    android:src="@drawable/facebook" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@android:color/transparent"
-                    android:elevation="0dp"
-                    android:insetTop="0dp"
-                    android:insetBottom="0dp"
-                    android:minHeight="0dp"
-                    android:padding="0dp"
-                    android:text="Registrate"
-                    android:textColor="@color/azul"
-                    style="@style/Widget.MaterialComponents.Button.TextButton" />
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:text="Facebook"
+                    android:textColor="@color/azul_negro"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <!--Ya tienes cuenta?-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:text="No tienes una cuenta?"
+                    android:textColor="@color/gris" />
+
+                <TextView
+                    android:id="@+id/btnIrLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:gravity="center"
+                    android:text="@string/SignUp"
+                    android:textColor="@color/azul" />
+
+
             </LinearLayout>
 
         </LinearLayout>
+
     </ScrollView>
+
 </FrameLayout>
