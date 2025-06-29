@@ -76,7 +76,6 @@ public class Login extends AppCompatActivity {
                 return;
             }
 
-            // 🔔 Confirmación antes de enviar el correo
             new AlertDialog.Builder(Login.this)
                     .setTitle("Restablecer contraseña")
                     .setMessage("¿Deseas restablecer tu contraseña?\nSe enviará un correo a:\n\n" + userEmail)
@@ -95,7 +94,12 @@ public class Login extends AppCompatActivity {
         });
 
         //Boton de regresar
-        btnBack.setOnClickListener(v -> finish());
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         //Boton de ir a SignUp
         btnIrSignUp.setOnClickListener(v -> {

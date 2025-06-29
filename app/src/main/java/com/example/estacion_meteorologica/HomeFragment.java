@@ -27,6 +27,7 @@ import com.bumptech.glide.Glide;
 import com.ekn.gruzer.gaugelibrary.ArcGauge;
 import com.ekn.gruzer.gaugelibrary.HalfGauge;
 import com.ekn.gruzer.gaugelibrary.Range;
+import com.example.estacion_meteorologica.models.RegistroClima;
 import com.example.estacion_meteorologica.start.Welcome;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Description;
@@ -182,27 +183,6 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    class RegistroClima {
-        String fecha;
-        String hora;
-        String ciudad;
-        String pais;
-        Double temperatura;
-        Double humedad;
-        Double sensacionTermica;
-        Double presionLocal;
-        Double presionMar;
-        Double altitud;
-        Double viento;
-        Integer lluvia;
-        Integer gas;
-        Integer tendencia;
-        Integer monoxido;
-        Integer humo;
-        Integer rocio;
-        Integer indiceCalor;
-        Integer humedadSuelo;
-    }
 
     private void findViews(View view){
         gaugePresionMar = view.findViewById(R.id.gaugePresionMar);
@@ -426,7 +406,6 @@ public class HomeFragment extends Fragment {
             iconoResId = R.drawable.ic_variable;
         }
 
-        // Actualizar la UI
         textoEstadoComodidad.setText(estado);
         textoDetalleComodidad.setText(detalle);
         iconoComodidad.setImageResource(iconoResId);

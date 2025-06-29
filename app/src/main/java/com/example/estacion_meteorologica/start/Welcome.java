@@ -36,8 +36,6 @@ public class Welcome extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
 
         if (currentUser != null) {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
             return;
         }
         setContentView(R.layout.activity_welcome);
@@ -62,7 +60,6 @@ public class Welcome extends AppCompatActivity {
                 viewPager.setCurrentItem(current + 1);
             } else {
                 startActivity(new Intent(this, SignUp.class));
-                finish(); // Opcional, para que no regrese a bienvenida si presiona atrás
             }
         });
 

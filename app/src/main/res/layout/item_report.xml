@@ -1,0 +1,226 @@
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/cardView"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvFecha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fecha: 2025-06-22" />
+
+        <TextView
+            android:id="@+id/tvHora"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hora: 18:37:58" />
+
+        <!-- 1. Clima general -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clima"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:id="@+id/tvTemperatura"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Temperatura: 23.0°C" />
+
+            <TextView
+                android:id="@+id/tvSensacion"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Sensación: 23.0°C" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2"
+            android:paddingBottom="8dp">
+
+            <TextView
+                android:id="@+id/tvRocio"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Punto de rocío: 16.0°C" />
+
+            <TextView
+                android:id="@+id/tvIndiceCalor"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Índice de calor: 23" />
+        </LinearLayout>
+
+        <!-- 2. Humedad y lluvia -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Humedad y Lluvia"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/tvHumedad"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Humedad: 64.9%" />
+
+            <TextView
+                android:id="@+id/tvLluvia"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Lluvia: 5%" />
+
+            <TextView
+                android:id="@+id/tvHumedadSuelo"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Suelo: 5%" />
+        </LinearLayout>
+
+        <!-- 3. Viento y presión -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Viento y Presión"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvViento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Viento: 48.8 km/h" />
+
+            <TextView
+                android:id="@+id/tvPresionLocal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Presión local: 997.17 hPa" />
+
+            <TextView
+                android:id="@+id/tvPresionMar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Presión mar: 1012.56 hPa" />
+
+            <TextView
+                android:id="@+id/tvTendenciaPresion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Tendencia: 0.0 hPa" />
+        </LinearLayout>
+
+        <!-- 4. Gases -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Gases"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="3">
+
+            <TextView
+                android:id="@+id/tvGasLPG"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="LPG: 1 ppm" />
+
+            <TextView
+                android:id="@+id/tvCO"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="CO: 1 ppm" />
+
+            <TextView
+                android:id="@+id/tvHumo"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="Humo: 1 ppm" />
+        </LinearLayout>
+
+        <!-- 5. Ubicación y tiempo -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ubicación"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:paddingTop="8dp"
+            android:paddingBottom="4dp" />
+
+        <TextView
+            android:id="@+id/tvAltitud"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Altitud: 134.7 m" />
+
+        <TextView
+            android:id="@+id/tvPais"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pais: El Salvador" />
+
+        <TextView
+            android:id="@+id/tvCiudad"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ciudad: San Miguel" />
+
+
+    </LinearLayout>
+</androidx.cardview.widget.CardView>
+

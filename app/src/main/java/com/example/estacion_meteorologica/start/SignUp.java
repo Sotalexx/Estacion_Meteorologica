@@ -70,12 +70,17 @@ public class SignUp extends AppCompatActivity {
 
         googleSignInClient = GoogleSignIn.getClient(this, gso);
 
-        btnBack.setOnClickListener(v -> finish());
+        //Boton de regresar
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         btnIrLogin.setOnClickListener(v -> {
             Intent intent = new Intent(SignUp.this, Login.class);
             startActivity(intent);
-            finish();
         });
 
         btnSignup.setOnClickListener(v -> {
