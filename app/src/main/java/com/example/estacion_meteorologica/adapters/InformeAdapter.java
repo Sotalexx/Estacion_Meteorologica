@@ -14,7 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.estacion_meteorologica.R;
 import com.example.estacion_meteorologica.models.RegistroClima;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class InformeAdapter extends RecyclerView.Adapter<InformeAdapter.InformeViewHolder> {
 
@@ -59,14 +63,34 @@ public class InformeAdapter extends RecyclerView.Adapter<InformeAdapter.InformeV
             Log.e("InformeAdapter No es NULL", "tvTemperatura es null en posición: " + position);
         }
 
-        holder.tvFecha.setText("Fecha: " + r.hora);
+        SimpleDateFormat entradaHora = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+        SimpleDateFormat salidaHora = new SimpleDateFormat("hh:mm a", Locale.getDefault());
+
+        try {
+            Date hora = entradaHora.parse(r.hora);
+            holder.tvHora.setText(salidaHora.format(hora));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            holder.tvHora.setText(r.hora);
+        }
+
+        holder.tvHora.setText("Hora: " + r.hora);
         holder.tvTemperatura.setText("Temperatura: " + r.temperatura + "°C");
-        holder.tvHumedad.setText("Humedad: " + r.humedad + "%");
+        holder.tvRocio.setText("Punto de rocío: " + r.rocio + "°C");
         holder.tvSensacion.setText("Sensación térmica: " + r.sensacionTermica + "°C");
+        holder.tvIndiceCalor.setText("Índice de calor: " + r.indiceCalor);
+        holder.tvHumedad.setText("Humedad: " + r.humedad + "%");
         holder.tvLluvia.setText("Lluvia: " + r.lluvia + "%");
+        holder.tvHumedadSuelo.setText("Humedad suelo: " + r.humedadSuelo + "%");
+        holder.tvPresionMar.setText("Presión mar: " + r.presionMar + " hPa");
+        holder.tvPresionLocal.setText("Presión local: " + r.presionLocal + " hPa");
         holder.tvViento.setText("Viento: " + r.viento + " km/h");
-        holder.tvPresion.setText("Presión: " + r.presionLocal + " hPa");
-        holder.tvGases.setText("Gases: CO " + r.monoxido + " ppm, LPG " + r.gas + " ppm, Humo " + r.humo + " ppm");
+        holder.tvTendenciaPresion.setText("Tendencia: " + r.tendencia + " hPa");
+        holder.tvAltitud.setText("Altitud: " + r.altitud + " m");
+        holder.tvGasLPG.setText("LPG: " + r.gas + " ppm");
+        holder.tvCO.setText("CO: " + r.monoxido + " ppm");
+        holder.tvHumo.setText("Humo: " + r.humo + " ppm");
+
     }
 
     @Override
@@ -76,19 +100,29 @@ public class InformeAdapter extends RecyclerView.Adapter<InformeAdapter.InformeV
 
     public static class InformeViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
-        TextView tvFecha, tvTemperatura, tvHumedad, tvSensacion,
-                tvLluvia, tvViento, tvPresion, tvGases;
+        TextView tvHora, tvTemperatura, tvRocio, tvSensacion, tvIndiceCalor,
+                tvHumedad, tvLluvia, tvHumedadSuelo, tvPresionMar, tvPresionLocal,
+                tvViento, tvTendenciaPresion, tvAltitud, tvGasLPG, tvCO, tvHumo;
+
 
         public InformeViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvFecha = itemView.findViewById(R.id.tvFecha);
+            tvHora = itemView.findViewById(R.id.tvHora);
             tvTemperatura = itemView.findViewById(R.id.tvTemperatura);
-            tvHumedad = itemView.findViewById(R.id.tvHumedad);
+            tvRocio = itemView.findViewById(R.id.tvRocio);
             tvSensacion = itemView.findViewById(R.id.tvSensacion);
+            tvIndiceCalor = itemView.findViewById(R.id.tvIndiceCalor);
+            tvHumedad = itemView.findViewById(R.id.tvHumedad);
             tvLluvia = itemView.findViewById(R.id.tvLluvia);
+            tvHumedadSuelo = itemView.findViewById(R.id.tvHumedadSuelo);
+            tvPresionMar = itemView.findViewById(R.id.tvPresionMar);
+            tvPresionLocal = itemView.findViewById(R.id.tvPresionLocal);
             tvViento = itemView.findViewById(R.id.tvViento);
-            tvPresion = itemView.findViewById(R.id.tvPresionLocal);
-            tvGases = itemView.findViewById(R.id.tvGasLPG);
+            tvTendenciaPresion = itemView.findViewById(R.id.tvTendenciaPresion);
+            tvAltitud = itemView.findViewById(R.id.tvAltitud);
+            tvGasLPG = itemView.findViewById(R.id.tvGasLPG);
+            tvCO = itemView.findViewById(R.id.tvCO);
+            tvHumo = itemView.findViewById(R.id.tvHumo);
             cardView = itemView.findViewById(R.id.cardView);
         }
     }

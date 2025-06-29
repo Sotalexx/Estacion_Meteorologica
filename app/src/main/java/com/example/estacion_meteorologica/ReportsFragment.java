@@ -1,8 +1,11 @@
 package com.example.estacion_meteorologica;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
@@ -26,20 +29,26 @@ import android.widget.Toast;
 
 import com.example.estacion_meteorologica.adapters.InformeAdapter;
 import com.example.estacion_meteorologica.models.RegistroClima;
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.TimeZone;
 
 
 public class ReportsFragment extends Fragment {
@@ -47,8 +56,9 @@ public class ReportsFragment extends Fragment {
     private DatabaseReference databaseReference;
     private RecyclerView recyclerInformes;
     private InformeAdapter adapter;
-    private Button btnSeleccionarFecha, btnExportarPdf;
-    private TextView fechaSeleccionadaa;
+    private Button btnSeleccionarFecha;
+    private MaterialButton btnExportarPdf;
+    private TextView tvDia, tvMes, tvAnio, tvSinRegistros;;
     private List<RegistroClima> registrosDelDia = new ArrayList<>();
 
 
@@ -64,8 +74,12 @@ public class ReportsFragment extends Fragment {
         adapter = new InformeAdapter(new ArrayList<>());
         recyclerInformes.setAdapter(adapter);
         btnSeleccionarFecha = view.findViewById(R.id.btnSeleccionarFecha);
-        fechaSeleccionadaa = view.findViewById(R.id.tvFechaSeleccionada);
+        tvDia = view.findViewById(R.id.tvDia);
+        tvMes = view.findViewById(R.id.tvMes);
+        tvAnio = view.findViewById(R.id.tvAnio);
         btnExportarPdf = view.findViewById(R.id.btnExportarPdf);
+        tvSinRegistros = view.findViewById(R.id.tvSinRegistros);
+
 
 
         btnExportarPdf.setOnClickListener(v -> {
@@ -84,26 +98,78 @@ public class ReportsFragment extends Fragment {
                 .getReference("estacion")
                 .child("datos");
 
+        SharedPreferences prefs = requireContext().getSharedPreferences("fechaPrefs", Context.MODE_PRIVATE);
+        String fechaGuardada = prefs.getString("fechaSeleccionada", null);
+        if (fechaGuardada != null) {
+            try {
+                String[] partes = fechaGuardada.split("-");
+                int anio = Integer.parseInt(partes[0]);
+                int mes = Integer.parseInt(partes[1]);
+                int dia = Integer.parseInt(partes[2]);
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(anio, mes - 1, dia);
+
+                SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", new Locale("es", "ES"));
+                String nombreMes = monthFormat.format(calendar.getTime());
+
+                tvAnio.setText(String.valueOf(anio));
+                tvMes.setText(nombreMes.toUpperCase());
+                tvDia.setText(String.valueOf(dia));
+
+                filtrarPorFecha(fechaGuardada);
+                leerRegistrosDelDia(view, fechaGuardada);
+                if (registrosDelDia.isEmpty()) {
+                    tvSinRegistros.setVisibility(View.VISIBLE);
+                } else {
+                    tvSinRegistros.setVisibility(View.GONE);
+                }
+            } catch (Exception e) {
+                Log.e("ReportsFragment", "Error al analizar fecha guardada", e);
+            }
+        }
+
+
         return view;
     }
 
     private void mostrarSelectorFecha() {
-        Calendar calendar = Calendar.getInstance();
+        MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTheme(R.style.ThemeOverlay_MaterialDatePicker_WhiteBG)
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build();
 
-        DatePickerDialog datePicker = new DatePickerDialog(
-                getContext(),
-                (view, year, month, dayOfMonth) -> {
-                    String fechaSeleccionada = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, dayOfMonth);
-                    fechaSeleccionadaa.setText(fechaSeleccionada);
-                    filtrarPorFecha(fechaSeleccionada);
-                    leerRegistrosDelDia(getView(), fechaSeleccionada);
-                },
-                calendar.get(Calendar.YEAR),
-                calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)
-        );
+        datePicker.show(getParentFragmentManager(), "DATE_PICKER");
 
-        datePicker.show();
+        datePicker.addOnPositiveButtonClickListener(selection -> {
+            Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            calendar.setTimeInMillis(selection);
+
+            int year = calendar.get(Calendar.YEAR);
+            int month = calendar.get(Calendar.MONTH);
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+            SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", new Locale("es", "ES"));
+            String nombreMes = monthFormat.format(calendar.getTime());
+
+            tvAnio.setText(String.valueOf(year));
+            tvMes.setText(nombreMes.toUpperCase());
+            tvDia.setText(String.valueOf(day));
+
+            String fechaSeleccionada = String.format(Locale.getDefault(), "%04d-%02d-%02d", year, month + 1, day);
+            filtrarPorFecha(fechaSeleccionada);
+            leerRegistrosDelDia(getView(), fechaSeleccionada);
+            if (registrosDelDia.isEmpty()) {
+                tvSinRegistros.setVisibility(View.VISIBLE);
+            } else {
+                tvSinRegistros.setVisibility(View.GONE);
+            }
+
+            SharedPreferences prefs = requireContext().getSharedPreferences("fechaPrefs", Context.MODE_PRIVATE);
+            prefs.edit().putString("fechaSeleccionada", fechaSeleccionada).apply();
+
+        });
+
     }
 
     private void filtrarPorFecha(String fechaSeleccionada) {
@@ -114,7 +180,6 @@ public class ReportsFragment extends Fragment {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (!snapshot.exists()) {
-                            Toast.makeText(getContext(), "No hay datos para esta fecha", Toast.LENGTH_SHORT).show();
                             adapter.actualizarDatos(new ArrayList<>());
                             return;
                         }
@@ -126,11 +191,11 @@ public class ReportsFragment extends Fragment {
                             listaTemporal.add(r);
                         }
 
-                        // Ordenar por hora si es necesario
                         Collections.sort(listaTemporal, (a, b) -> a.hora.compareTo(b.hora));
 
                         registrosDelDia.addAll(listaTemporal);
-                        adapter.actualizarDatos(registrosDelDia); // Si usas adapter para el RecyclerView
+                        adapter.actualizarDatos(registrosDelDia);
+
                     }
 
                     @Override
@@ -182,6 +247,7 @@ public class ReportsFragment extends Fragment {
                         }
 
                         adapter.actualizarDatos(registrosDelDia);
+
                     }
 
                     @Override
@@ -193,28 +259,38 @@ public class ReportsFragment extends Fragment {
     }
 
     private void exportarInformeAPdf(List<RegistroClima> registros) {
+        if (registros == null || registros.isEmpty()) return;
+
         PdfDocument documento = new PdfDocument();
         Paint paint = new Paint();
 
-        int paginaAncho = 595;  // A4 ancho en px
-        int paginaAlto = 842;   // A4 alto en px
-        int margen = 40;
-        int y = 80; // posición vertical inicial
+        Paint divider = new Paint();
+        divider.setColor(Color.LTGRAY);
+        divider.setStrokeWidth(1f);
+
+        int paginaAncho = 595;
+        int paginaAlto = 842;
+        int margen = 14;
+        int y = 80;
+
+        String fechaTitulo = registros.get(0).fecha;
 
         PdfDocument.PageInfo pageInfo = new PdfDocument.PageInfo.Builder(paginaAncho, paginaAlto, 1).create();
         PdfDocument.Page page = documento.startPage(pageInfo);
         Canvas canvas = page.getCanvas();
 
+        // Título principal
         paint.setTextSize(18);
         paint.setFakeBoldText(true);
-        canvas.drawText("Informe del Clima", margen, y, paint);
+        canvas.drawText("📊 Informe del Clima: " + fechaTitulo, margen, y, paint);
+        y += 30;
 
         paint.setTextSize(12);
         paint.setFakeBoldText(false);
-        y += 30;
 
         for (RegistroClima r : registros) {
-            if (y > paginaAlto - 60) {
+            // Salto de página si se acaba el espacio
+            if (y > paginaAlto - margen) {
                 documento.finishPage(page);
                 pageInfo = new PdfDocument.PageInfo.Builder(paginaAncho, paginaAlto, documento.getPages().size() + 1).create();
                 page = documento.startPage(pageInfo);
@@ -222,18 +298,64 @@ public class ReportsFragment extends Fragment {
                 y = 80;
             }
 
-            canvas.drawText("Fecha: " + r.fecha + "  Hora: " + r.hora, margen, y, paint);
+            canvas.drawText("📅 Fecha: " + r.fecha + "   🕓 Hora: " + r.hora, margen, y, paint);
+            y += 20;
+
+            // --- Clima general ---
+            paint.setFakeBoldText(true);
+            canvas.drawText("Clima General", margen, y, paint);
+            paint.setFakeBoldText(false);
             y += 18;
             canvas.drawText("Temperatura: " + r.temperatura + "°C", margen, y, paint); y += 18;
+            canvas.drawText("Sensación térmica: " + r.sensacionTermica + "°C", margen, y, paint); y += 18;
+            canvas.drawText("Punto de rocío: " + r.rocio + "°C", margen, y, paint); y += 18;
+            canvas.drawText("Índice de calor: " + r.indiceCalor, margen, y, paint); y += 25;
+
+            // --- Humedad y Lluvia ---
+            paint.setFakeBoldText(true);
+            canvas.drawText("Humedad y Lluvia", margen, y, paint);
+            paint.setFakeBoldText(false);
+            y += 18;
             canvas.drawText("Humedad: " + r.humedad + "%", margen, y, paint); y += 18;
+            canvas.drawText("Lluvia: " + r.lluvia + "%", margen, y, paint); y += 18;
+            canvas.drawText("Humedad del suelo: " + r.humedadSuelo + "%", margen, y, paint); y += 25;
+
+            // --- Viento y Presión ---
+            paint.setFakeBoldText(true);
+            canvas.drawText("Viento y Presión", margen, y, paint);
+            paint.setFakeBoldText(false);
+            y += 18;
             canvas.drawText("Viento: " + r.viento + " km/h", margen, y, paint); y += 18;
-            canvas.drawText("Presión Local: " + r.presionLocal + " hPa", margen, y, paint); y += 18;
-            canvas.drawText("Lluvia: " + r.lluvia + "%", margen, y, paint); y += 30;
+            canvas.drawText("Presión local: " + r.presionLocal + " hPa", margen, y, paint); y += 18;
+            canvas.drawText("Presión nivel del mar: " + r.presionMar + " hPa", margen, y, paint); y += 18;
+            canvas.drawText("Tendencia presión: " + r.tendencia + " hPa", margen, y, paint); y += 25;
+
+            // --- Gases ---
+            paint.setFakeBoldText(true);
+            canvas.drawText("Gases", margen, y, paint);
+            paint.setFakeBoldText(false);
+            y += 18;
+            canvas.drawText("LPG: " + r.gas + " ppm", margen, y, paint); y += 18;
+            canvas.drawText("Monóxido de carbono: " + r.monoxido + " ppm", margen, y, paint); y += 18;
+            canvas.drawText("Humo: " + r.humo + " ppm", margen, y, paint); y += 25;
+
+            // --- Ubicación ---
+            paint.setFakeBoldText(true);
+            canvas.drawText("Ubicación", margen, y, paint);
+            paint.setFakeBoldText(false);
+            y += 18;
+            canvas.drawText("Ciudad: " + r.ciudad, margen, y, paint); y += 18;
+            canvas.drawText("País: " + r.pais, margen, y, paint); y += 18;
+            canvas.drawText("Altitud: " + r.altitud + " m", margen, y, paint); y += 20;
+
+            // Línea divisoria
+            canvas.drawLine(margen, y, paginaAncho - margen, y, divider);
+            y += 20;
         }
 
         documento.finishPage(page);
 
-        // === Guardar en carpeta DESCARGAS ===
+        // Guardar PDF
         String nombreArchivo = "informe_clima_" + System.currentTimeMillis() + ".pdf";
         File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         File file = new File(downloadsDir, nombreArchivo);
@@ -244,9 +366,8 @@ public class ReportsFragment extends Fragment {
             fos.close();
             documento.close();
 
-            Toast.makeText(getContext(), "PDF exportado: " + file.getAbsolutePath(), Toast.LENGTH_LONG).show();
+            Toast.makeText(getContext(), "PDF exportado en Descargas", Toast.LENGTH_LONG).show();
 
-            // === Abrir automáticamente ===
             Uri pdfUri = FileProvider.getUriForFile(
                     requireContext(),
                     requireContext().getPackageName() + ".provider",
@@ -263,8 +384,6 @@ public class ReportsFragment extends Fragment {
             Toast.makeText(getContext(), "Error al exportar PDF", Toast.LENGTH_SHORT).show();
         }
     }
-
-
 
 
 }

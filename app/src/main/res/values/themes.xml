@@ -1,11 +1,25 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
+
+    <!-- Base application theme -->
     <style name="Base.Theme.Estacion_Meteorologica" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <!-- Puedes personalizar más aquí si deseas -->
+        <!-- <item name="colorPrimary">@color/tu_color</item> -->
     </style>
 
+    <!-- Estilo personalizado para el fondo blanco del DatePicker -->
+    <style name="ThemeOverlay_MaterialDatePicker_WhiteBG" parent="ThemeOverlay.Material3.MaterialCalendar">
+        <item name="materialCalendarTheme">@style/CalendarTheme_White</item>
+    </style>
+
+    <style name="CalendarTheme_White" parent="Theme.Material3.DayNight.Dialog">
+        <item name="colorSurface">@android:color/white</item> <!-- o usa @color/blanco_puro si está definido -->
+        <item name="colorOnSurface">@android:color/black</item>
+    </style>
+
+    <!-- Tu tema principal que extiende del base -->
     <style name="Theme.Estacion_Meteorologica" parent="Base.Theme.Estacion_Meteorologica" />
 
-
 </resources>
+
+
+
