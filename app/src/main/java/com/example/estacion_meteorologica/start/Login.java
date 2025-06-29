@@ -27,6 +27,7 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
@@ -35,7 +36,6 @@ public class Login extends AppCompatActivity {
 
     private static final int RC_SIGN_IN = 1001;
     private static final String TAG = "Login";
-
     private LinearLayout btnGoogle;
     private TextView btnIrSignUp, tvOlvidasteContrasena;
     private Button btnLogin, btnBack;
@@ -157,6 +157,8 @@ public class Login extends AppCompatActivity {
         btnGoogle.setOnClickListener(v -> signInWithGoogle());
     }
 
+
+
     private void signInWithGoogle() {
         Intent signInIntent = googleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
@@ -208,5 +210,4 @@ public class Login extends AppCompatActivity {
                     }
                 });
     }
-
 }
