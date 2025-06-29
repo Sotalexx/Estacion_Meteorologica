@@ -22,4 +22,6 @@
     </string>
 
     <string name="client_id">384339025610-29es4iiro93rgmu7gd2c9hg00jq36nv9.apps.googleusercontent.com</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
