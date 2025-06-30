@@ -1,14 +1,392 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChartsFragment">
+    android:paddingHorizontal="14dp"
+    android:orientation="vertical"
+    android:background="@drawable/background_main">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <!--Header-->
+    <LinearLayout
+        android:id="@+id/LLheader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!--Boton de regresar-->
+        <Button
+            android:id="@+id/btnCerrarSesion"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:backgroundTint="#66FFFFFF"
+            android:paddingStart="15dp"
+            app:icon="@drawable/arrow_back"
+            app:iconTint="@color/gris" />
+
+        <TextView
+            android:id="@+id/tvLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:gravity="center"
+            android:text="San Miguel \nEl Salvador"
+            android:textColor="@color/gris"
+            android:textSize="10sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btnPerfil"
+            android:layout_width="40dp"
+            android:layout_height="45dp"
+            android:backgroundTint="#66FFFFFF"
+            android:paddingStart="11.5dp"
+            app:icon="@drawable/ic_user"
+            app:iconTint="@color/gris" />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/seccionFecha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="0dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingVertical="8dp"
+            android:paddingHorizontal="2dp"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="10dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="4dp"
+                    android:fontFamily="@font/sofia_sans"
+                    android:text="Desde"
+                    android:textColor="@color/gris"
+                    android:gravity="center"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingStart="4dp"
+                    android:fontFamily="@font/sofia_sans"
+                    android:text="Hasta"
+                    android:textColor="@color/gris"
+                    android:gravity="center"
+                    android:textSize="10sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="6dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="4dp">
+
+                    <Button
+                        android:id="@+id/btnFechaInicio"
+                        android:layout_width="35dp"
+                        android:layout_height="42dp"
+                        android:layout_marginEnd="3dp"
+                        android:backgroundTint="#F0F0F0"
+                        android:contentDescription="Seleccionar fecha"
+                        android:paddingStart="8dp"
+                        app:icon="@drawable/ic_calendario"
+                        app:iconTint="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:weightSum="5"
+                        android:background="@drawable/bg_rounded_lightgray"
+                        android:orientation="horizontal">
+
+                        <!-- Dia  -->
+                        <TextView
+                            android:id="@+id/tvDia1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="2dp"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:paddingHorizontal="10dp"
+                            android:text="00"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <View
+                            android:layout_width="0.5dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/gris" />
+
+                        <!-- Mes -->
+                        <TextView
+                            android:id="@+id/tvMes1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center"
+                            android:paddingHorizontal="5dp"
+                            android:text="00"
+                            android:layout_weight="3"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <View
+                            android:layout_width="0.5dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/gris" />
+
+                        <!-- Año -->
+                        <TextView
+                            android:id="@+id/tvAnio1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center"
+                            android:paddingHorizontal="10dp"
+                            android:text="0000"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="6dp"
+                    android:paddingTop="10dp"
+                    android:paddingBottom="4dp">
+
+                    <Button
+                        android:id="@+id/btnFechaFinal"
+                        android:layout_width="35dp"
+                        android:layout_height="42dp"
+                        android:layout_marginEnd="3dp"
+                        android:backgroundTint="#F0F0F0"
+                        android:contentDescription="Seleccionar fecha"
+                        android:paddingStart="8dp"
+                        app:icon="@drawable/ic_calendario"
+                        app:iconTint="@color/black" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:weightSum="5"
+                        android:background="@drawable/bg_rounded_lightgray"
+                        android:orientation="horizontal">
+
+                        <!-- Dia  -->
+                        <TextView
+                            android:id="@+id/tvDia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="2dp"
+                            android:gravity="center"
+                            android:layout_weight="1"
+                            android:paddingHorizontal="10dp"
+                            android:text="00"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <View
+                            android:layout_width="0.5dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/gris" />
+
+                        <!-- Mes -->
+                        <TextView
+                            android:id="@+id/tvMes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center"
+                            android:paddingHorizontal="5dp"
+                            android:text="00"
+                            android:layout_weight="3"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                        <View
+                            android:layout_width="0.5dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginVertical="10dp"
+                            android:background="@color/gris" />
+
+                        <!-- Año -->
+                        <TextView
+                            android:id="@+id/tvAnio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center"
+                            android:paddingHorizontal="10dp"
+                            android:text="0000"
+                            android:layout_weight="1"
+                            android:textColor="@android:color/black"
+                            android:textSize="10sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <!-- Botón aplicar filtro -->
+            <Button
+                android:id="@+id/btnAplicarFiltro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cargar gráficos"
+                android:layout_gravity="center"
+                android:textSize="12dp"
+                android:backgroundTint="@color/azul"
+                android:textColor="@android:color/white" />
+
+        </LinearLayout>
+
+
+    </androidx.cardview.widget.CardView>
+
+    <!-- ScrollView para mostrar datos -->
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
+        android:scrollbars="none">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-</FrameLayout>
+            <!-- Gráfico de barras - TEMPERATURA -->
+            <TextView
+                android:id="@+id/Titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:fontFamily="@font/sofia_sans"
+                android:gravity="end"
+                android:text="Comparación de temperaturas"
+                android:textColor="@color/gris"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <com.github.mikephil.charting.charts.BarChart
+                    android:id="@+id/chartTemperatura"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginVertical="15dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="@color/white" />
+            </androidx.cardview.widget.CardView>
+
+
+            <!-- Gráfico de Lineas - VARIACION DIARIA -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:fontFamily="@font/sofia_sans"
+                android:gravity="end"
+                android:text="Variación diaria"
+                android:textColor="@color/gris"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chartVariacionDiaria"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
+                    android:layout_marginVertical="15dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="@color/white" />
+            </androidx.cardview.widget.CardView>
+
+            <!-- Gráfico de PieChart - CONTAMINACIÓN DEL AIRE -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="8dp"
+                android:fontFamily="@font/sofia_sans"
+                android:gravity="end"
+                android:text="Calidad del aire: proporción de contaminantes"
+                android:textColor="@color/gris"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <com.github.mikephil.charting.charts.PieChart
+                    android:id="@+id/chartContaminacionAire"
+                    android:layout_width="match_parent"
+                    android:layout_height="270dp"
+                    android:layout_marginVertical="15dp"
+                    android:layout_marginHorizontal="20dp"
+                    android:background="@color/white" />
+            </androidx.cardview.widget.CardView>
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+
+</LinearLayout>

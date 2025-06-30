@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:gravity="center"
-            android:text="San Miguel \nCiudad Real"
+            android:text="San Miguel \nEl Salvador"
             android:textColor="@color/gris"
             android:textSize="12sp"
             android:textStyle="bold" />

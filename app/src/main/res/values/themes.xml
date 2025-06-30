@@ -19,6 +19,8 @@
     <!-- Tu tema principal que extiende del base -->
     <style name="Theme.Estacion_Meteorologica" parent="Base.Theme.Estacion_Meteorologica" />
 
+
+
 </resources>
 
 

@@ -46,10 +46,11 @@ public class InformeAdapter extends RecyclerView.Adapter<InformeAdapter.InformeV
 
         int[] coloresPastel = {
                 Color.parseColor("#C3E2FE"),
-                Color.parseColor("#E3EEFA"),
                 Color.parseColor("#F9D5E5"),
                 Color.parseColor("#D5F4E6"),
-                Color.parseColor("#FFFACD")
+                Color.parseColor("#E3EEFA"),
+                Color.parseColor("#FFFACD"),
+                Color.parseColor("#8CFFFFFF")
         };
 
         int color = coloresPastel[position % coloresPastel.length];
@@ -81,7 +82,7 @@ public class InformeAdapter extends RecyclerView.Adapter<InformeAdapter.InformeV
         holder.tvIndiceCalor.setText("Índice de calor: " + r.indiceCalor);
         holder.tvHumedad.setText("Humedad: " + r.humedad + "%");
         holder.tvLluvia.setText("Lluvia: " + r.lluvia + "%");
-        holder.tvHumedadSuelo.setText("Humedad suelo: " + r.humedadSuelo + "%");
+        holder.tvHumedadSuelo.setText("Suelo: " + r.humedadSuelo + "%");
         holder.tvPresionMar.setText("Presión mar: " + r.presionMar + " hPa");
         holder.tvPresionLocal.setText("Presión local: " + r.presionLocal + " hPa");
         holder.tvViento.setText("Viento: " + r.viento + " km/h");

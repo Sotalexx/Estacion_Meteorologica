@@ -7,12 +7,15 @@ import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.graphics.pdf.PdfDocument;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,14 +27,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.estacion_meteorologica.adapters.InformeAdapter;
 import com.example.estacion_meteorologica.models.RegistroClima;
+import com.example.estacion_meteorologica.start.Welcome;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.datepicker.CalendarConstraints;
+import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -79,6 +92,9 @@ public class ReportsFragment extends Fragment {
         tvAnio = view.findViewById(R.id.tvAnio);
         btnExportarPdf = view.findViewById(R.id.btnExportarPdf);
         tvSinRegistros = view.findViewById(R.id.tvSinRegistros);
+        Button btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
+        Button btnPerfil = view.findViewById(R.id.btnPerfil);
+        TextView tvLocation = view.findViewById(R.id.tvLocation);
 
 
 
@@ -90,9 +106,71 @@ public class ReportsFragment extends Fragment {
             }
         });
 
-
         //Seleccionar fecha
         btnSeleccionarFecha.setOnClickListener(v -> mostrarSelectorFecha());
+
+        // Botón de cerrar sesión
+        btnCerrarSesion.setOnClickListener(v -> {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Cerrar sesión")
+                    .setMessage("¿Estás seguro que deseas cerrar sesión?")
+                    .setPositiveButton("Sí", (dialog, which) -> {
+                        FirebaseAuth.getInstance().signOut();
+
+                        SharedPreferences prefs = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.remove("recuerdame");
+                        editor.apply();
+
+                        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(requireContext(),
+                                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                        .requestIdToken(getString(R.string.client_id))
+                                        .requestEmail()
+                                        .build());
+                        googleSignInClient.signOut();
+
+                        Intent intent = new Intent(requireActivity(), Welcome.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+
+        // Botón de perfil
+        btnPerfil.setOnClickListener(v -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user != null) {
+                View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_perfil, null);
+
+                ImageView imgPerfil = dialogView.findViewById(R.id.imgPerfil);
+                TextView tvNombre = dialogView.findViewById(R.id.tvNombrePerfil);
+                TextView tvCorreo = dialogView.findViewById(R.id.tvCorreoPerfil);
+
+                tvNombre.setText(user.getDisplayName() != null ? user.getDisplayName() : "Nombre no disponible");
+                tvCorreo.setText(user.getEmail());
+
+                Uri photoUri = user.getPhotoUrl();
+                if (photoUri != null) {
+                    Glide.with(this)
+                            .load(photoUri)
+                            .circleCrop()
+                            .placeholder(R.drawable.ic_user_placeholder)
+                            .into(imgPerfil);
+                } else {
+                    imgPerfil.setImageResource(R.drawable.ic_user_placeholder);
+                }
+
+                new AlertDialog.Builder(requireContext())
+                        .setView(dialogView)
+                        .setPositiveButton("Cerrar", null)
+                        .show();
+            } else {
+                Toast.makeText(requireContext(), "No hay usuario en sesión", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         //Conectar Base
         databaseReference = FirebaseDatabase.getInstance()
                 .getReference("estacion")
@@ -129,13 +207,70 @@ public class ReportsFragment extends Fragment {
             }
         }
 
-
         return view;
     }
 
+
+    private RegistroClima obtenerDatosDeSnapshot(DataSnapshot snapshot) {
+        RegistroClima r = new RegistroClima();
+        r.fecha = snapshot.child("fecha").getValue(String.class);
+        r.hora = snapshot.child("hora").getValue(String.class);
+        r.temperatura = snapshot.child("temperatura").getValue(Double.class);
+        r.humedad = snapshot.child("humedad").getValue(Double.class);
+        r.sensacionTermica = snapshot.child("sensacion_termica").getValue(Double.class);
+        r.presionLocal = snapshot.child("presion_local").getValue(Double.class);
+        r.presionMar = snapshot.child("presion_nivel_mar").getValue(Double.class);
+        r.altitud = snapshot.child("altitud_calculada").getValue(Double.class);
+        r.viento = snapshot.child("viento_kmh").getValue(Double.class);
+        r.lluvia = snapshot.child("lluvia_porcentaje").getValue(Integer.class);
+        r.gas = snapshot.child("lpg_ppm").getValue(Integer.class);
+        r.tendencia = snapshot.child("presion_tendencia").getValue(Integer.class);
+        r.monoxido = snapshot.child("co_ppm").getValue(Integer.class);
+        r.humo = snapshot.child("smoke_ppm").getValue(Integer.class);
+        r.rocio = snapshot.child("punto_rocio").getValue(Integer.class);
+        r.indiceCalor = snapshot.child("indice_calor").getValue(Integer.class);
+        r.humedadSuelo = snapshot.child("suelo_humedad").getValue(Integer.class);
+        r.pais = snapshot.child("ciudad").getValue(String.class);
+        r.ciudad = snapshot.child("pais").getValue(String.class);
+        return r;
+    }
+
+    private void leerRegistrosDelDia(View view, String fechaSeleccionada) {
+        databaseReference.orderByChild("fecha").equalTo(fechaSeleccionada)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        List<RegistroClima> registrosDelDia = new ArrayList<>();
+                        for (DataSnapshot datoSnapshot : snapshot.getChildren()) {
+                            RegistroClima registro = obtenerDatosDeSnapshot(datoSnapshot);
+                            if (registro != null) {
+                                registrosDelDia.add(registro);
+                            }
+                        }
+
+                        if (registrosDelDia.isEmpty()) {
+                            Toast.makeText(getContext(), "No hay registros para la fecha seleccionada", Toast.LENGTH_SHORT).show();
+                        }
+
+                        adapter.actualizarDatos(registrosDelDia);
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("Firebase", "Error al leer registros", error.toException());
+                        Toast.makeText(getContext(), "Error al leer los registros", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     private void mostrarSelectorFecha() {
+        CalendarConstraints.Builder constraintsBuilder = new CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointBackward.now());
+
         MaterialDatePicker<Long> datePicker = MaterialDatePicker.Builder.datePicker()
                 .setTheme(R.style.ThemeOverlay_MaterialDatePicker_WhiteBG)
+                .setCalendarConstraints(constraintsBuilder.build())
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
                 .build();
 
@@ -205,73 +340,25 @@ public class ReportsFragment extends Fragment {
                 });
     }
 
-    private RegistroClima obtenerDatosDeSnapshot(DataSnapshot snapshot) {
-        RegistroClima r = new RegistroClima();
-        r.fecha = snapshot.child("fecha").getValue(String.class);
-        r.hora = snapshot.child("hora").getValue(String.class);
-        r.temperatura = snapshot.child("temperatura").getValue(Double.class);
-        r.humedad = snapshot.child("humedad").getValue(Double.class);
-        r.sensacionTermica = snapshot.child("sensacion_termica").getValue(Double.class);
-        r.presionLocal = snapshot.child("presion_local").getValue(Double.class);
-        r.presionMar = snapshot.child("presion_nivel_mar").getValue(Double.class);
-        r.altitud = snapshot.child("altitud_calculada").getValue(Double.class);
-        r.viento = snapshot.child("viento_kmh").getValue(Double.class);
-        r.lluvia = snapshot.child("lluvia_porcentaje").getValue(Integer.class);
-        r.gas = snapshot.child("lpg_ppm").getValue(Integer.class);
-        r.tendencia = snapshot.child("presion_tendencia").getValue(Integer.class);
-        r.monoxido = snapshot.child("co_ppm").getValue(Integer.class);
-        r.humo = snapshot.child("smoke_ppm").getValue(Integer.class);
-        r.rocio = snapshot.child("punto_rocio").getValue(Integer.class);
-        r.indiceCalor = snapshot.child("indice_calor").getValue(Integer.class);
-        r.humedadSuelo = snapshot.child("suelo_humedad").getValue(Integer.class);
-        r.pais = snapshot.child("ciudad").getValue(String.class);
-        r.ciudad = snapshot.child("pais").getValue(String.class);
-        return r;
-    }
-
-    private void leerRegistrosDelDia(View view, String fechaSeleccionada) {
-        databaseReference.orderByChild("fecha").equalTo(fechaSeleccionada)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        List<RegistroClima> registrosDelDia = new ArrayList<>();
-                        for (DataSnapshot datoSnapshot : snapshot.getChildren()) {
-                            RegistroClima registro = obtenerDatosDeSnapshot(datoSnapshot);
-                            if (registro != null) {
-                                registrosDelDia.add(registro);
-                            }
-                        }
-
-                        if (registrosDelDia.isEmpty()) {
-                            Toast.makeText(getContext(), "No hay registros para la fecha seleccionada", Toast.LENGTH_SHORT).show();
-                        }
-
-                        adapter.actualizarDatos(registrosDelDia);
-
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("Firebase", "Error al leer registros", error.toException());
-                        Toast.makeText(getContext(), "Error al leer los registros", Toast.LENGTH_SHORT).show();
-                    }
-                });
-    }
-
     private void exportarInformeAPdf(List<RegistroClima> registros) {
         if (registros == null || registros.isEmpty()) return;
 
         PdfDocument documento = new PdfDocument();
         Paint paint = new Paint();
-
         Paint divider = new Paint();
+
         divider.setColor(Color.LTGRAY);
         divider.setStrokeWidth(1f);
 
+        int margen = 57;
         int paginaAncho = 595;
         int paginaAlto = 842;
-        int margen = 14;
         int y = 80;
+
+        int registrosPorPagina = 2;
+        int contadorRegistros = 0;
+        int colorGris = ContextCompat.getColor(requireContext(), R.color.gris);
+        int colorNegro = ContextCompat.getColor(requireContext(), R.color.black);
 
         String fechaTitulo = registros.get(0).fecha;
 
@@ -280,77 +367,93 @@ public class ReportsFragment extends Fragment {
         Canvas canvas = page.getCanvas();
 
         // Título principal
-        paint.setTextSize(18);
+        paint.setTextSize(20);
         paint.setFakeBoldText(true);
-        canvas.drawText("📊 Informe del Clima: " + fechaTitulo, margen, y, paint);
-        y += 30;
+        String titulo = "📊 Informe del Clima";
+        String subtitulo = fechaTitulo;
+        float textoAncho = paint.measureText(titulo);
+        float xCentrado = (paginaAncho - textoAncho) / 2;
+        canvas.drawText(titulo, xCentrado, y, paint);
+        y += 22;
+        paint.setColor(colorGris);
+        textoAncho = paint.measureText(subtitulo);
+        xCentrado = (paginaAncho - textoAncho) / 2;
+        canvas.drawText(subtitulo, xCentrado, y, paint);
+        y += 50;
 
         paint.setTextSize(12);
         paint.setFakeBoldText(false);
 
         for (RegistroClima r : registros) {
-            // Salto de página si se acaba el espacio
-            if (y > paginaAlto - margen) {
+            if (contadorRegistros == registrosPorPagina) {
                 documento.finishPage(page);
                 pageInfo = new PdfDocument.PageInfo.Builder(paginaAncho, paginaAlto, documento.getPages().size() + 1).create();
                 page = documento.startPage(pageInfo);
                 canvas = page.getCanvas();
                 y = 80;
+                contadorRegistros = 0;
             }
 
-            canvas.drawText("📅 Fecha: " + r.fecha + "   🕓 Hora: " + r.hora, margen, y, paint);
+            paint.setColor(colorNegro);
+            // --- Hora ---
+            canvas.drawText("🕓 Hora: " + r.hora, margen, y, paint);
             y += 20;
 
-            // --- Clima general ---
+            int col1X = margen;
+            int col2X = paginaAncho / 2 + 10;
+
+            // --- Clima General ---
             paint.setFakeBoldText(true);
             canvas.drawText("Clima General", margen, y, paint);
-            paint.setFakeBoldText(false);
+            paint.setFakeBoldText(false); y += 18;
+            canvas.drawText("Temperatura: " + r.temperatura + "°C", col1X, y, paint);
+            canvas.drawText("Sensación térmica: " + r.sensacionTermica + "°C", col2X, y, paint);
             y += 18;
-            canvas.drawText("Temperatura: " + r.temperatura + "°C", margen, y, paint); y += 18;
-            canvas.drawText("Sensación térmica: " + r.sensacionTermica + "°C", margen, y, paint); y += 18;
-            canvas.drawText("Punto de rocío: " + r.rocio + "°C", margen, y, paint); y += 18;
-            canvas.drawText("Índice de calor: " + r.indiceCalor, margen, y, paint); y += 25;
+            canvas.drawText("Punto de rocío: " + r.rocio + "°C", col1X, y, paint);
+            canvas.drawText("Índice de calor: " + r.indiceCalor + "°C", col2X, y, paint);
+            y += 25;
 
             // --- Humedad y Lluvia ---
             paint.setFakeBoldText(true);
             canvas.drawText("Humedad y Lluvia", margen, y, paint);
-            paint.setFakeBoldText(false);
+            paint.setFakeBoldText(false); y += 18;
+            canvas.drawText("Humedad: " + r.humedad + "%", col1X, y, paint);
+            canvas.drawText("Lluvia: " + r.lluvia + "%", col2X, y, paint);
             y += 18;
-            canvas.drawText("Humedad: " + r.humedad + "%", margen, y, paint); y += 18;
-            canvas.drawText("Lluvia: " + r.lluvia + "%", margen, y, paint); y += 18;
-            canvas.drawText("Humedad del suelo: " + r.humedadSuelo + "%", margen, y, paint); y += 25;
+            canvas.drawText("Humedad del suelo: " + r.humedadSuelo + "%", col1X, y, paint);
+            y += 25;
 
             // --- Viento y Presión ---
             paint.setFakeBoldText(true);
             canvas.drawText("Viento y Presión", margen, y, paint);
-            paint.setFakeBoldText(false);
+            paint.setFakeBoldText(false); y += 18;
+            canvas.drawText("Viento: " + r.viento + " km/h", col1X, y, paint);
+            canvas.drawText("Presión local: " + r.presionLocal + " hPa", col2X, y, paint);
             y += 18;
-            canvas.drawText("Viento: " + r.viento + " km/h", margen, y, paint); y += 18;
-            canvas.drawText("Presión local: " + r.presionLocal + " hPa", margen, y, paint); y += 18;
-            canvas.drawText("Presión nivel del mar: " + r.presionMar + " hPa", margen, y, paint); y += 18;
-            canvas.drawText("Tendencia presión: " + r.tendencia + " hPa", margen, y, paint); y += 25;
+            canvas.drawText("Presión mar: " + r.presionMar + " hPa", col1X, y, paint);
+            canvas.drawText("Tendencia: " + r.tendencia + " hPa", col2X, y, paint);
+            y += 18;
+            canvas.drawText("Altitud: " + r.altitud + " m", col1X, y, paint);
+            y += 25;
 
             // --- Gases ---
             paint.setFakeBoldText(true);
             canvas.drawText("Gases", margen, y, paint);
-            paint.setFakeBoldText(false);
+            paint.setFakeBoldText(false); y += 18;
+            canvas.drawText("LPG: " + r.gas + " ppm", col1X, y, paint);
+            canvas.drawText("Monóxido: " + r.monoxido + " ppm", col2X, y, paint);
             y += 18;
-            canvas.drawText("LPG: " + r.gas + " ppm", margen, y, paint); y += 18;
-            canvas.drawText("Monóxido de carbono: " + r.monoxido + " ppm", margen, y, paint); y += 18;
-            canvas.drawText("Humo: " + r.humo + " ppm", margen, y, paint); y += 25;
-
-            // --- Ubicación ---
-            paint.setFakeBoldText(true);
-            canvas.drawText("Ubicación", margen, y, paint);
-            paint.setFakeBoldText(false);
-            y += 18;
-            canvas.drawText("Ciudad: " + r.ciudad, margen, y, paint); y += 18;
-            canvas.drawText("País: " + r.pais, margen, y, paint); y += 18;
-            canvas.drawText("Altitud: " + r.altitud + " m", margen, y, paint); y += 20;
-
-            // Línea divisoria
-            canvas.drawLine(margen, y, paginaAncho - margen, y, divider);
+            canvas.drawText("Humo: " + r.humo + " ppm", col1X, y, paint);
             y += 20;
+
+
+            if (contadorRegistros == 0) {
+                // Línea divisoria
+                canvas.drawLine(margen, y, paginaAncho - margen, y, divider);
+                y += 25;
+            }
+
+            contadorRegistros++;
         }
 
         documento.finishPage(page);
