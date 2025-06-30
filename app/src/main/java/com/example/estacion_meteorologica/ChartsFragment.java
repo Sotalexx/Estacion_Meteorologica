@@ -1,12 +1,15 @@
 package com.example.estacion_meteorologica;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.core.util.Pair;
 import androidx.fragment.app.Fragment;
@@ -16,10 +19,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.example.estacion_meteorologica.models.RegistroClima;
+import com.example.estacion_meteorologica.start.Welcome;
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.charts.LineChart;
@@ -39,9 +45,14 @@ import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointBackward;
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,6 +61,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -111,16 +124,135 @@ public class ChartsFragment extends Fragment {
         tvDia1 = view.findViewById(R.id.tvDia1);
         tvMes1 = view.findViewById(R.id.tvMes1);
         tvAnio1 = view.findViewById(R.id.tvAnio1);
+        Button btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
+        Button btnPerfil = view.findViewById(R.id.btnPerfil);
 
         btnFechaInicio.setOnClickListener(v -> mostrarSelectorFecha(tvAnio1, tvMes1, tvDia1, true));
         btnFechaFinal.setOnClickListener(v -> mostrarSelectorFecha(tvAnio, tvMes, tvDia, false));
 
+        // Botón de cerrar sesión
+        btnCerrarSesion.setOnClickListener(v -> {
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Cerrar sesión")
+                    .setMessage("¿Estás seguro que deseas cerrar sesión?")
+                    .setPositiveButton("Sí", (dialog, which) -> {
+                        FirebaseAuth.getInstance().signOut();
+
+                        SharedPreferences prefs = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.remove("recuerdame");
+                        editor.remove("fechaPrefs");
+                        editor.remove("fechaPrefs2");
+                        editor.apply();
+
+                        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(requireContext(),
+                                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                                        .requestIdToken(getString(R.string.client_id))
+                                        .requestEmail()
+                                        .build());
+                        googleSignInClient.signOut();
+
+                        Intent intent = new Intent(requireActivity(), Welcome.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                        startActivity(intent);
+                    })
+                    .setNegativeButton("Cancelar", (dialog, which) -> dialog.dismiss())
+                    .show();
+        });
+
+        // Botón de perfil
+        btnPerfil.setOnClickListener(v -> {
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+            if (user != null) {
+                View dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_perfil, null);
+
+                ImageView imgPerfil = dialogView.findViewById(R.id.imgPerfil);
+                TextView tvNombre = dialogView.findViewById(R.id.tvNombrePerfil);
+                TextView tvCorreo = dialogView.findViewById(R.id.tvCorreoPerfil);
+
+                tvNombre.setText(user.getDisplayName() != null ? user.getDisplayName() : "Nombre no disponible");
+                tvCorreo.setText(user.getEmail());
+
+                Uri photoUri = user.getPhotoUrl();
+                if (photoUri != null) {
+                    Glide.with(this)
+                            .load(photoUri)
+                            .circleCrop()
+                            .placeholder(R.drawable.ic_user_placeholder)
+                            .into(imgPerfil);
+                } else {
+                    imgPerfil.setImageResource(R.drawable.ic_user_placeholder);
+                }
+
+                new AlertDialog.Builder(requireContext())
+                        .setView(dialogView)
+                        .setPositiveButton("Cerrar", null)
+                        .show();
+            } else {
+                Toast.makeText(requireContext(), "No hay usuario en sesión", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         databaseReference = FirebaseDatabase.getInstance()
                 .getReference("estacion")
                 .child("datos");
+        SharedPreferences prefs = requireContext().getSharedPreferences("fechaPrefs2", Context.MODE_PRIVATE);
+        String fechaGuardada = prefs.getString("fechaSeleccionada", null);
+        if (fechaGuardada != null) {
+            try {
+                String[] partes = fechaGuardada.split("-");
+                SimpleDateFormat sdf = new SimpleDateFormat("EEE MMM dd HH:mm:ss z yyyy", Locale.ENGLISH);
+                Date fechaInici = sdf.parse(partes[0]);
+                Date fechaFini = sdf.parse(partes[1]);
+
+
+                Calendar cal1 = Calendar.getInstance();
+                cal1.setTime(fechaInici);
+
+                int anio1 = cal1.get(Calendar.YEAR);
+                int mes1 = cal1.get(Calendar.MONTH); // OJO: Enero = 0
+                int dia1 = cal1.get(Calendar.DAY_OF_MONTH);
+
+                Calendar cal2 = Calendar.getInstance();
+                cal2.setTime(fechaFini);
+
+                int anio2 = cal2.get(Calendar.YEAR);
+                int mes2 = cal2.get(Calendar.MONTH);
+                int dia2 = cal2.get(Calendar.DAY_OF_MONTH);
+
+                SimpleDateFormat monthFormat = new SimpleDateFormat("MMMM", new Locale("es", "ES"));
+                String nombreMes1 = monthFormat.format(cal1.getTime());
+                String nombreMes2 = monthFormat.format(cal2.getTime());
+
+                tvAnio1.setText(String.valueOf(anio1));
+                tvMes1.setText(nombreMes1.toUpperCase());
+                tvDia1.setText(String.valueOf(dia1));
+
+                tvAnio.setText(String.valueOf(anio2));
+                tvMes.setText(nombreMes2.toUpperCase());
+                tvDia.setText(String.valueOf(dia2));
+
+
+                fechaInicio = fechaInici;
+                fechaFin = fechaFini;
+
+                consultarPromediosMultiplesVariables(fechaInici, fechaFini, (temp, humedad, sensacion, lpg, co, humo) -> {
+                    mostrarGraficoLineas(temp, sensacion, humedad);
+                    mostrarGraficoDesdeMapa(temp);
+                    mostrarPieChartContaminantes(chartContaminacionAire, lpg, co, humo);
+                });
+
+            } catch (Exception e) {
+                Log.e("ReportsFragment", "Error al analizar fecha guardada", e);
+            }
+        }
         btnAplicarFiltro.setOnClickListener(v -> {
             if (fechaInicio != null && fechaFin != null) {
+                String fechas = fechaInicio.toString() + "-" + fechaFin.toString();
+                SharedPreferences prefs2 = requireContext().getSharedPreferences("fechaPrefs2", Context.MODE_PRIVATE);
+                prefs2.edit().putString("fechaSeleccionada", fechas).apply();
+
                 consultarPromediosMultiplesVariables(fechaInicio, fechaFin, (temp, humedad, sensacion, lpg, co, humo) -> {
                     mostrarGraficoLineas(temp, sensacion, humedad);
                     mostrarGraficoDesdeMapa(temp);
@@ -210,6 +342,7 @@ public class ChartsFragment extends Fragment {
         if (lpg == 0 && co == 0 && humo == 0) {
             pieChart.clear();
             pieChart.setNoDataText("No hay contaminación registrada.");
+            pieChart.setNoDataTextColor(R.color.gris);
             return;
         }
 
@@ -267,10 +400,13 @@ public class ChartsFragment extends Fragment {
         chartTemperatura.setScaleEnabled(false);
         chartTemperatura.setHighlightPerTapEnabled(false);
 
-        dataSet.setColors(new int[]{0xFFC3E2FE, 0xFF00BCD4, 0xFFF9D5E5, 0xFFE3EEFA, 0xFFD5F4E6});
+        dataSet.setColors(new int[]{0xFFC3E2FE, 0xFF00BCD4, 0xFFF9D5E5, 0xFFE3EEFA, 0xFFD5F4E6, 0xFF348DF1});
         chartTemperatura.getLegend().setForm(Legend.LegendForm.SQUARE);
         chartTemperatura.getLegend().setHorizontalAlignment(Legend.LegendHorizontalAlignment.CENTER);
         chartTemperatura.setExtraBottomOffset(10f);
+
+        chartTemperatura.setNoDataText("No hay contaminación registrada.");
+        chartTemperatura.setNoDataTextColor(R.color.gris);
 
         // Eje Y izquierdo con símbolo de grados
         YAxis leftAxis = chartTemperatura.getAxisLeft();
@@ -326,8 +462,8 @@ public class ChartsFragment extends Fragment {
         tempSet.setLineWidth(2f);
 
         LineDataSet sensacionSet = new LineDataSet(sensacionEntries, "Sensación térmica (°C)");
-        sensacionSet.setColor(0xFFD5F4E6);
-        sensacionSet.setCircleColor(0xFFD5F4E6);
+        sensacionSet.setColor(0xFF348DF1);
+        sensacionSet.setCircleColor(0xFF348DF1);
         sensacionSet.setLineWidth(2f);
 
         LineDataSet humedadSet = new LineDataSet(humedadEntries, "Humedad (%)");
@@ -337,6 +473,9 @@ public class ChartsFragment extends Fragment {
 
         LineData data = new LineData(tempSet, sensacionSet, humedadSet);
         chartVariacionDiaria.setData(data);
+        chartVariacionDiaria.setNoDataText("No hay contaminación registrada.");
+        chartVariacionDiaria.setNoDataTextColor(R.color.gris);
+
 
         // Eje X personalizado con las fechas
         XAxis xAxis = chartVariacionDiaria.getXAxis();
@@ -416,6 +555,7 @@ public class ChartsFragment extends Fragment {
             tvAnio.setText(String.valueOf(year));
             tvMes.setText(nombreMes.toUpperCase());
             tvDia.setText(String.valueOf(day));
+
 
             Log.d("FechaSeleccionada", (esInicio ? "Inicio: " : "Fin: ") + calendar.getTime().toString());
         });

@@ -80,6 +80,7 @@
                 android:paddingStart="4dp"
                 android:fontFamily="@font/sofia_sans"
                 android:text="Weather Nest"
+                android:textColor="@color/azul"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -193,7 +194,7 @@
         android:backgroundTint="@color/white"
         android:contentDescription="Exportar PDF"
         app:icon="@drawable/ic_pdf"
-        app:iconTint="#B71C1C"
+        app:iconTint="@color/azul"
         app:cornerRadius="16dp"
         app:iconSize="30dp"
         app:iconGravity="textStart"

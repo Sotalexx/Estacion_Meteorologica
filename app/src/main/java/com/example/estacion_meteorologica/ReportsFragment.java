@@ -120,6 +120,8 @@ public class ReportsFragment extends Fragment {
                         SharedPreferences prefs = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.remove("recuerdame");
+                        editor.remove("fechaPrefs");
+                        editor.remove("fechaPrefs2");
                         editor.apply();
 
                         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(requireContext(),
@@ -197,42 +199,18 @@ public class ReportsFragment extends Fragment {
 
                 filtrarPorFecha(fechaGuardada);
                 leerRegistrosDelDia(view, fechaGuardada);
-                if (registrosDelDia.isEmpty()) {
-                    tvSinRegistros.setVisibility(View.VISIBLE);
-                } else {
-                    tvSinRegistros.setVisibility(View.GONE);
-                }
             } catch (Exception e) {
                 Log.e("ReportsFragment", "Error al analizar fecha guardada", e);
             }
         }
 
+        if (registrosDelDia.isEmpty() ) {
+            tvSinRegistros.setVisibility(View.VISIBLE);
+        } else {
+            tvSinRegistros.setVisibility(View.GONE);
+        }
+
         return view;
-    }
-
-
-    private RegistroClima obtenerDatosDeSnapshot(DataSnapshot snapshot) {
-        RegistroClima r = new RegistroClima();
-        r.fecha = snapshot.child("fecha").getValue(String.class);
-        r.hora = snapshot.child("hora").getValue(String.class);
-        r.temperatura = snapshot.child("temperatura").getValue(Double.class);
-        r.humedad = snapshot.child("humedad").getValue(Double.class);
-        r.sensacionTermica = snapshot.child("sensacion_termica").getValue(Double.class);
-        r.presionLocal = snapshot.child("presion_local").getValue(Double.class);
-        r.presionMar = snapshot.child("presion_nivel_mar").getValue(Double.class);
-        r.altitud = snapshot.child("altitud_calculada").getValue(Double.class);
-        r.viento = snapshot.child("viento_kmh").getValue(Double.class);
-        r.lluvia = snapshot.child("lluvia_porcentaje").getValue(Integer.class);
-        r.gas = snapshot.child("lpg_ppm").getValue(Integer.class);
-        r.tendencia = snapshot.child("presion_tendencia").getValue(Integer.class);
-        r.monoxido = snapshot.child("co_ppm").getValue(Integer.class);
-        r.humo = snapshot.child("smoke_ppm").getValue(Integer.class);
-        r.rocio = snapshot.child("punto_rocio").getValue(Integer.class);
-        r.indiceCalor = snapshot.child("indice_calor").getValue(Integer.class);
-        r.humedadSuelo = snapshot.child("suelo_humedad").getValue(Integer.class);
-        r.pais = snapshot.child("ciudad").getValue(String.class);
-        r.ciudad = snapshot.child("pais").getValue(String.class);
-        return r;
     }
 
     private void leerRegistrosDelDia(View view, String fechaSeleccionada) {
@@ -252,7 +230,13 @@ public class ReportsFragment extends Fragment {
                             Toast.makeText(getContext(), "No hay registros para la fecha seleccionada", Toast.LENGTH_SHORT).show();
                         }
 
+
                         adapter.actualizarDatos(registrosDelDia);
+                        if (registrosDelDia.isEmpty() ) {
+                            tvSinRegistros.setVisibility(View.VISIBLE);
+                        } else {
+                            tvSinRegistros.setVisibility(View.GONE);
+                        }
 
                     }
 
@@ -488,5 +472,28 @@ public class ReportsFragment extends Fragment {
         }
     }
 
+    private RegistroClima obtenerDatosDeSnapshot(DataSnapshot snapshot) {
+        RegistroClima r = new RegistroClima();
+        r.fecha = snapshot.child("fecha").getValue(String.class);
+        r.hora = snapshot.child("hora").getValue(String.class);
+        r.temperatura = snapshot.child("temperatura").getValue(Double.class);
+        r.humedad = snapshot.child("humedad").getValue(Double.class);
+        r.sensacionTermica = snapshot.child("sensacion_termica").getValue(Double.class);
+        r.presionLocal = snapshot.child("presion_local").getValue(Double.class);
+        r.presionMar = snapshot.child("presion_nivel_mar").getValue(Double.class);
+        r.altitud = snapshot.child("altitud_calculada").getValue(Double.class);
+        r.viento = snapshot.child("viento_kmh").getValue(Double.class);
+        r.lluvia = snapshot.child("lluvia_porcentaje").getValue(Integer.class);
+        r.gas = snapshot.child("lpg_ppm").getValue(Integer.class);
+        r.tendencia = snapshot.child("presion_tendencia").getValue(Integer.class);
+        r.monoxido = snapshot.child("co_ppm").getValue(Integer.class);
+        r.humo = snapshot.child("smoke_ppm").getValue(Integer.class);
+        r.rocio = snapshot.child("punto_rocio").getValue(Integer.class);
+        r.indiceCalor = snapshot.child("indice_calor").getValue(Integer.class);
+        r.humedadSuelo = snapshot.child("suelo_humedad").getValue(Integer.class);
+        r.pais = snapshot.child("ciudad").getValue(String.class);
+        r.ciudad = snapshot.child("pais").getValue(String.class);
+        return r;
+    }
 
 }

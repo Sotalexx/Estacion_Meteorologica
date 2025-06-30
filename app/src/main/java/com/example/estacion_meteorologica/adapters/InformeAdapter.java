@@ -1,5 +1,6 @@
 package com.example.estacion_meteorologica.adapters;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -9,6 +10,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.estacion_meteorologica.R;
@@ -46,12 +48,12 @@ public class InformeAdapter extends RecyclerView.Adapter<InformeAdapter.InformeV
 
         int[] coloresPastel = {
                 Color.parseColor("#C3E2FE"),
-                Color.parseColor("#F9D5E5"),
-                Color.parseColor("#D5F4E6"),
                 Color.parseColor("#E3EEFA"),
+                Color.parseColor("#D5F4E6"),
                 Color.parseColor("#FFFACD"),
-                Color.parseColor("#8CFFFFFF")
+                Color.parseColor("#F9D5E5"),
         };
+
 
         int color = coloresPastel[position % coloresPastel.length];
         holder.cardView.setBackgroundColor(color);

@@ -273,9 +273,10 @@
                 android:id="@+id/btnAplicarFiltro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Cargar gráficos"
+                android:text="Gráficar"
                 android:layout_gravity="center"
                 android:textSize="12dp"
+                app:icon="@drawable/ic_graphics"
                 android:backgroundTint="@color/azul"
                 android:textColor="@android:color/white" />
 
@@ -283,6 +284,7 @@
 
 
     </androidx.cardview.widget.CardView>
+
 
     <!-- ScrollView para mostrar datos -->
     <ScrollView

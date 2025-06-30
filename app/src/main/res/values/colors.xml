@@ -2,13 +2,23 @@
 <resources>
     <color name="black">#000000</color>
     <color name="white">#FFFFFF</color>
-
-    <color name="azul">#348DF1</color>
     <color name="blanco">#DAE3EA</color>
     <color name="azul_negro">#06090C</color>
+    <color name="negro">#000000</color>
+
+    <!-- Base -->
     <color name="gris">#6E7276</color>
-    <color name="fondo">#F5F9FF</color>
     <color name="morado">#673AB7</color>
     <color name="aqua">#00BCD4</color>
+    <color name="azul">#348DF1</color>
+    <color name="fondo">#F5F9FF</color>
+
+    <!-- Tonos pastel compatibles -->
+    <color name="pastel_azul">#C3E2FE</color>
+    <color name="pastel_lila">#E3EEFA</color>
+    <color name="pastel_verde">#D5F4E6</color>
+    <color name="pastel_rosa">#F9D5E5</color>
+    <color name="pastel_amarillo">#FFFACD</color>
+
     <color name="blanco_puro">#FFFFFF</color>
 </resources>

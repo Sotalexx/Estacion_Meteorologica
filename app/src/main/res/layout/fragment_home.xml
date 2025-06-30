@@ -80,6 +80,7 @@
                     android:layout_marginVertical="10dp"
                     app:cardCornerRadius="16dp"
                     app:cardElevation="0dp"
+                    android:backgroundTint="@color/blanco_puro"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/LLheader">
@@ -198,7 +199,7 @@
                                 android:layout_height="120dp"
                                 android:layout_marginEnd="5dp"
                                 android:layout_weight="1"
-                                android:backgroundTint="#C3E2FE"
+                                android:backgroundTint="@color/pastel_azul"
                                 android:padding="10dp"
                                 app:cardCornerRadius="16dp"
                                 app:cardElevation="0dp">
@@ -206,7 +207,6 @@
                                 <LinearLayout
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:backgroundTint="@color/azul"
                                     android:orientation="vertical"
                                     android:padding="8dp"
                                     android:paddingStart="20dp">
@@ -243,7 +243,7 @@
                                 android:layout_height="120dp"
                                 android:layout_marginEnd="5dp"
                                 android:layout_weight="1"
-                                android:backgroundTint="#E3EEFA"
+                                android:backgroundTint="@color/pastel_lila"
                                 android:padding="10dp"
                                 app:cardCornerRadius="16dp"
                                 app:cardElevation="0dp">
@@ -287,7 +287,7 @@
                                 android:layout_width="0dp"
                                 android:layout_height="120dp"
                                 android:layout_weight="1"
-                                android:backgroundTint="#E3EEFA"
+                                android:backgroundTint="@color/pastel_lila"
                                 android:padding="10dp"
                                 app:cardCornerRadius="16dp"
                                 app:cardElevation="0dp">
@@ -340,6 +340,7 @@
                     android:layout_marginTop="10dp"
                     app:cardBackgroundColor="@android:color/transparent"
                     app:cardCornerRadius="16dp"
+                    app:strokeColor="@android:color/transparent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/cardPrincipalSection">
@@ -347,10 +348,10 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="110dp"
-                        android:background="@drawable/background_gradient_card"
+                        android:background="@color/azul"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
-                        android:paddingVertical="14dp"
+                        android:paddingVertical="8dp"
                         android:paddingHorizontal="8dp">
 
                         <ImageView
@@ -372,7 +373,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Ambiente templado y húmedo"
-                                android:textColor="@android:color/white"
+                                android:textColor="@color/blanco_puro"
                                 android:textSize="15sp"
                                 android:textStyle="bold" />
 
@@ -381,8 +382,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:paddingEnd="1dp"
+                                android:textColor="@color/blanco_puro"
                                 android:text="Condiciones agradables para actividades al aire libre"
-                                android:textColor="@android:color/white"
                                 android:textSize="13sp" />
                         </LinearLayout>
                     </LinearLayout>
@@ -421,6 +422,7 @@
                         android:layout_height="150dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
+                        android:backgroundTint="@color/blanco_puro"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -464,10 +466,10 @@
                                 app:dotWidth="5dp"
                                 app:drawDot="true"
                                 app:fillBackground="false"
-                                app:gradientEndColor="#3F51B5"
+                                app:gradientEndColor="@color/azul"
                                 app:gradientType="linear"
                                 app:progressBackgroundColor="@color/blanco_puro"
-                                app:progressColor="@color/azul"
+                                app:progressColor="@color/morado"
                                 app:progressStrokeWidth="10dp"
                                 app:startAngle="100"
                                 app:textColor="@color/azul"
@@ -484,6 +486,7 @@
                         android:layout_height="150dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
+                        android:backgroundTint="@color/blanco_puro"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -527,13 +530,13 @@
                                 app:dotWidth="5dp"
                                 app:drawDot="true"
                                 app:fillBackground="false"
-                                app:gradientEndColor="#673AB7"
+                                app:gradientEndColor="@color/pastel_azul"
                                 app:gradientType="linear"
                                 app:progressBackgroundColor="@color/blanco_puro"
-                                app:progressColor="@color/azul"
+                                app:progressColor="@color/aqua"
                                 app:progressStrokeWidth="10dp"
                                 app:startAngle="100"
-                                app:textColor="@color/azul"
+                                app:textColor="@color/aqua"
                                 app:textSize="10dp" />
 
 
@@ -560,6 +563,7 @@
                         android:layout_height="105dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
+                        android:backgroundTint="@color/blanco_puro"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -610,6 +614,7 @@
                         android:layout_height="105dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
+                        android:backgroundTint="@color/blanco_puro"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -691,7 +696,7 @@
                         android:layout_height="105dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#8CFFFFFF"
+                        android:backgroundTint="#EDF2F7"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -742,7 +747,7 @@
                         android:layout_height="105dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#8CFFFFFF"
+                        android:backgroundTint="#EDF2F7"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -808,7 +813,7 @@
                         android:layout_height="105dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#8CFFFFFF"
+                        android:backgroundTint="#EDF2F7"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -859,7 +864,7 @@
                         android:layout_height="105dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#8CFFFFFF"
+                        android:backgroundTint="#EDF2F7"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -942,7 +947,7 @@
                         android:layout_height="150dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#266E7276"
+                        android:backgroundTint="@color/blanco_puro"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -987,13 +992,13 @@
                                 app:dotWidth="5dp"
                                 app:drawDot="true"
                                 app:fillBackground="false"
-                                app:gradientEndColor="#00BCD4"
+                                app:gradientEndColor="@color/azul"
                                 app:gradientType="linear"
-                                app:progressBackgroundColor="#006E7276"
-                                app:progressColor="@color/azul"
+                                app:progressBackgroundColor="@color/blanco_puro"
+                                app:progressColor="@color/aqua"
                                 app:progressStrokeWidth="10dp"
                                 app:startAngle="100"
-                                app:textColor="@color/azul"
+                                app:textColor="@color/aqua"
                                 app:textSize="10dp" />
 
 
@@ -1007,7 +1012,7 @@
                         android:layout_height="150dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#266E7276"
+                        android:backgroundTint="@color/blanco_puro"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -1056,7 +1061,7 @@
                                         android:layout_height="wrap_content"
                                         android:fontFamily="@font/sofia_sans"
                                         android:text="● Rocío"
-                                        android:textColor="#00BCD4"
+                                        android:textColor="@color/aqua"
                                         android:textSize="12sp"
                                         android:textStyle="bold" />
 
@@ -1101,7 +1106,7 @@
                         android:layout_height="150dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#266E7276"
+                        android:backgroundTint="@color/blanco_puro"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 
@@ -1153,7 +1158,7 @@
                         android:layout_height="150dp"
                         android:layout_marginEnd="5dp"
                         android:layout_weight="1"
-                        android:backgroundTint="#266E7276"
+                        android:backgroundTint="@color/blanco_puro"
                         app:cardCornerRadius="16dp"
                         app:cardElevation="0dp">
 

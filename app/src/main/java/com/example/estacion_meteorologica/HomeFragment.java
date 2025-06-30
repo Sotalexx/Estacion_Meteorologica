@@ -105,6 +105,8 @@ public class HomeFragment extends Fragment {
                         SharedPreferences prefs = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = prefs.edit();
                         editor.remove("recuerdame");
+                        editor.remove("fechaPrefs");
+                        editor.remove("fechaPrefs2");
                         editor.apply();
 
                         GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(requireContext(),
@@ -459,11 +461,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void configurarGaugeIndiceCalor(Integer indice) {
-        agregarRangoGauge(gaugeIndiceCalor, 0.0, 27.0, "#4CAF50");
-        agregarRangoGauge(gaugeIndiceCalor, 27.0, 32.0, "#FFEB3B");
-        agregarRangoGauge(gaugeIndiceCalor, 32.0, 39.0, "#FF9800");
-        agregarRangoGauge(gaugeIndiceCalor, 39.0, 51.0, "#F1A134");
-        agregarRangoGauge(gaugeIndiceCalor, 51.0, 60.0, "#B71C1C");
+
+        agregarRangoGauge(gaugeIndiceCalor, 0.0, 27.0, "#D5F4E6");
+        agregarRangoGauge(gaugeIndiceCalor, 27.0, 32.0, "#FFFACD");
+        agregarRangoGauge(gaugeIndiceCalor, 32.0, 39.0, "#FFE0B2");
+        agregarRangoGauge(gaugeIndiceCalor, 39.0, 51.0, "#F9D5E5");
+        agregarRangoGauge(gaugeIndiceCalor, 51.0, 60.0, "#FF8F00");
+
         gaugeIndiceCalor.setMinValue(0.0);
         gaugeIndiceCalor.setMaxValue(60.0);
         gaugeIndiceCalor.setValue(indice);
