@@ -178,12 +178,13 @@ public class SignUp extends AppCompatActivity {
 
                         // Redirigir
                         if (confirmacion) {
+                            Toast.makeText(this, "Sesión iniciada con Google", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUp.this, MainActivity.class));
                         } else {
+                            Toast.makeText(this, "Usuario creado, inicia sesion", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(SignUp.this, Login.class));
                         }
 
-                        Toast.makeText(this, "Sesión iniciada con Google", Toast.LENGTH_SHORT).show();
                         finish();
 
                     } else {

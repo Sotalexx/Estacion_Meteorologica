@@ -127,6 +127,14 @@ public class ChartsFragment extends Fragment {
         Button btnCerrarSesion = view.findViewById(R.id.btnCerrarSesion);
         Button btnPerfil = view.findViewById(R.id.btnPerfil);
 
+        chartTemperatura.setNoDataText("Seleccione un rango de fechas.");
+        chartTemperatura.setNoDataTextColor(R.color.gris);
+        chartVariacionDiaria.setNoDataText("Seleccione un rango de fechas.");
+        chartVariacionDiaria.setNoDataTextColor(R.color.gris);
+        chartContaminacionAire.setNoDataText("Seleccione un rango de fechas.");
+        chartContaminacionAire.setNoDataTextColor(R.color.gris);
+
+
         btnFechaInicio.setOnClickListener(v -> mostrarSelectorFecha(tvAnio1, tvMes1, tvDia1, true));
         btnFechaFinal.setOnClickListener(v -> mostrarSelectorFecha(tvAnio, tvMes, tvDia, false));
 
